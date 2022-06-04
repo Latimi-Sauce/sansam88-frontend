@@ -1,11 +1,11 @@
-import antdFrFR from 'antd/es/locale/fr_FR';
+import antdFrFR from "antd/es/locale/fr_FR";
 import frMsg from "../locales/fr_FR.json";
-
+// ko_KR
 const FrLang = {
   antd: antdFrFR,
-  locale: 'fr-FR',
+  locale: "fr-FR",
   messages: {
-    ...frMsg
+    ...frMsg,
   },
 };
 export default FrLang;
