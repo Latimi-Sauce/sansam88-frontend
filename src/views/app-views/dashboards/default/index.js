@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Row, Col, Button, Card, Table } from "antd";
 import StatisticWidget from "components/shared-components/StatisticWidget";
 import AvatarStatus from "components/shared-components/AvatarStatus";
-import { AnnualStatisticData, NewMembersData, RecentTransactionData } from "./components/DefaultDashboardData";
+import { AnnualStatisticData, NewMembersData, RecentTransactionData } from "../components/DefaultDashboardData";
 import { UserAddOutlined, UserSwitchOutlined, FileDoneOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import DataDisplayWidget from "components/shared-components/DataDisplayWidget";
@@ -14,12 +14,23 @@ import {
   RecentOrder,
   TopProduct,
   tableColumns,
-} from "./components/Dashboard";
+} from "../components/Dashboard";
+import { useEffect } from "react";
+import JwtAuthService from "services/JwtAuthService";
+import { useSelector } from "react-redux";
 
 export const DefaultDashboard = () => {
   const [annualStatisticData] = useState(AnnualStatisticData);
   const [newMembersData] = useState(NewMembersData);
   const [recentTransactionData] = useState(RecentTransactionData);
+  const token = useSelector((state) => state.auth.token);
+  const data = async () => {
+    const real = await JwtAuthService.getWallet(token);
+    console.log(real);
+  };
+  useEffect(() => {
+    setTimeout(data, 2000);
+  }, []);
 
   return (
     <>

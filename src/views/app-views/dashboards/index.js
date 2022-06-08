@@ -7,6 +7,7 @@ const dashboard = ({ match }) => {
     <Suspense fallback={<Loading cover="content" />}>
       <Switch>
         <Route path={`${match.url}/default`} component={lazy(() => import(`./default`))} />
+        <Route path={`${match.url}/wallet`} component={lazy(() => import(`./wallet`))} />
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
     </Suspense>
