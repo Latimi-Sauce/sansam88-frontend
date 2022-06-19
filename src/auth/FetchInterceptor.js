@@ -12,16 +12,21 @@ const service = axios.create({
 // Config
 const ENTRY_ROUTE = "/auth/login";
 const TOKEN_PAYLOAD_KEY = "authorization";
-
+const PUBLIC_REQUEST_KEY = "public-request";
 // API Request interceptor
 service.interceptors.request.use(
   async (config) => {
     let jwtToken = localStorage.getItem(AUTH_TOKEN);
-    config.headers["Content-Type"] = "application/json";
-    config.headers[TOKEN_PAYLOAD_KEY] = `Bearer ${jwtToken}`;
+    if (jwtToken) {
+      config.headers["Content-Type"] = "application/json";
+      config.headers[TOKEN_PAYLOAD_KEY] = `Bearer ${jwtToken}`;
+    }
 
-    if (!jwtToken) {
+    // header에 public request가 없을 경우 + jwtToken이 없을때 => 로그인시는 public Request key는 true 이기 때문에 로컬스토리지에 jwt검사를 안하게 된다.
+    if (!jwtToken && !config.headers[PUBLIC_REQUEST_KEY]) {
+      localStorage.removeItem(AUTH_TOKEN);
       history.push(ENTRY_ROUTE);
+      window.location.reload();
     }
     // jwt validator를 사용하여 유저가 있는지 확인하는 api 호출 해야한다.
     return config;
@@ -57,7 +62,7 @@ service.interceptors.response.use(
         );
         localStorage.setItem(AUTH_TOKEN, referal.data.access);
         originalRequest.headers.authorization = `Bearer ${referal.data.access}`;
-        return axios(originalRequest);
+        return axios(originalRequest).then(() => window.location.reload());
       } catch (e) {
         localStorage.removeItem(AUTH_TOKEN);
         history.push(ENTRY_ROUTE);

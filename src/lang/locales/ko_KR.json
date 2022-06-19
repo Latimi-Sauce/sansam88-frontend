@@ -6,9 +6,9 @@
   "sidenav.dashboards.wallet": "가계부",
 
   "sidenav.store": "가게",
-  "sidenav.sales": "판매",
-  "sidenav.sales.default": "판매 내역",
-  "sidenav.sales.create": "판매 추가",
+  "sidenav.sales": "주문",
+  "sidenav.sales.default": "주문 내역",
+  "sidenav.sales.create": "주문 추가",
 
   "sidenav.customers": "고객",
   "sidenav.customers.default": "고객 목록",

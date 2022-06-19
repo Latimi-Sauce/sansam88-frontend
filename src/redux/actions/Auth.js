@@ -1,17 +1,13 @@
 import {
   SIGNIN,
   AUTHENTICATED,
-  SIGNOUT,
   SIGNOUT_SUCCESS,
   SHOW_AUTH_MESSAGE,
   HIDE_AUTH_MESSAGE,
   SIGNUP,
   SIGNUP_SUCCESS,
   SHOW_LOADING,
-  SIGNIN_WITH_GOOGLE,
-  SIGNIN_WITH_GOOGLE_AUTHENTICATED,
-  SIGNIN_WITH_FACEBOOK,
-  SIGNIN_WITH_FACEBOOK_AUTHENTICATED,
+  AUTH_TOKEN,
 } from "../constants/Auth";
 
 export const signIn = (user) => {
@@ -29,12 +25,7 @@ export const authenticated = (token) => {
 };
 
 export const signOut = () => {
-  return {
-    type: SIGNOUT,
-  };
-};
-
-export const signOutSuccess = () => {
+  localStorage.removeItem(AUTH_TOKEN);
   return {
     type: SIGNOUT_SUCCESS,
   };
@@ -50,32 +41,6 @@ export const signUp = (user) => {
 export const signUpSuccess = (token) => {
   return {
     type: SIGNUP_SUCCESS,
-    token,
-  };
-};
-
-export const signInWithGoogle = () => {
-  return {
-    type: SIGNIN_WITH_GOOGLE,
-  };
-};
-
-export const signInWithGoogleAuthenticated = (token) => {
-  return {
-    type: SIGNIN_WITH_GOOGLE_AUTHENTICATED,
-    token,
-  };
-};
-
-export const signInWithFacebook = () => {
-  return {
-    type: SIGNIN_WITH_FACEBOOK,
-  };
-};
-
-export const signInWithFacebookAuthenticated = (token) => {
-  return {
-    type: SIGNIN_WITH_FACEBOOK_AUTHENTICATED,
     token,
   };
 };

@@ -9,14 +9,13 @@ import {
   SIGNIN_WITH_GOOGLE_AUTHENTICATED,
   SIGNIN_WITH_FACEBOOK_AUTHENTICATED,
 } from "../constants/Auth";
-
 const initState = {
   loading: false,
   message: "",
   showMessage: false,
   redirect: "",
   token:
-    localStorage.getItem(AUTH_TOKEN) !== null || localStorage.getItem(AUTH_TOKEN) !== ""
+    localStorage.getItem(AUTH_TOKEN) !== null && localStorage.getItem(AUTH_TOKEN) !== ""
       ? localStorage.getItem(AUTH_TOKEN)
       : null,
 };

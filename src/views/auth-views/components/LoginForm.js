@@ -3,16 +3,7 @@ import { connect } from "react-redux";
 import { Button, Form, Input, Divider, Alert } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
-import { GoogleSVG, FacebookSVG } from "assets/svg/icon";
-import CustomIcon from "components/util-components/CustomIcon";
-import {
-  signIn,
-  showLoading,
-  showAuthMessage,
-  hideAuthMessage,
-  signInWithGoogle,
-  signInWithFacebook,
-} from "redux/actions/Auth";
+import { signIn, showLoading, showAuthMessage, hideAuthMessage } from "redux/actions/Auth";
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -23,10 +14,7 @@ export const LoginForm = (props) => {
     otherSignIn,
     showForgetPassword,
     hideAuthMessage,
-    onForgetPasswordClick,
     showLoading,
-    signInWithGoogle,
-    signInWithFacebook,
     extra,
     signIn,
     token,
@@ -47,16 +35,6 @@ export const LoginForm = (props) => {
     signIn(values);
   };
 
-  const onGoogleLogin = () => {
-    showLoading();
-    signInWithGoogle();
-  };
-
-  const onFacebookLogin = () => {
-    showLoading();
-    signInWithFacebook();
-  };
-
   useEffect(() => {
     if (token !== null && allowRedirect) {
       history.push(redirect);
@@ -71,21 +49,8 @@ export const LoginForm = (props) => {
   const renderOtherSignIn = (
     <div>
       <Divider>
-        <span className="text-muted font-size-base font-weight-normal">or connect with</span>
+        <span className="text-muted font-size-base font-weight-normal">Latimi Sourced</span>
       </Divider>
-      <div className="d-flex justify-content-center">
-        <Button
-          onClick={() => onGoogleLogin()}
-          className="mr-2"
-          disabled={loading}
-          icon={<CustomIcon svg={GoogleSVG} />}
-        >
-          Google
-        </Button>
-        <Button onClick={() => onFacebookLogin()} icon={<CustomIcon svg={FacebookSVG} />} disabled={loading}>
-          Facebook
-        </Button>
-      </div>
     </div>
   );
 
@@ -103,7 +68,7 @@ export const LoginForm = (props) => {
       <Form layout="vertical" name="login-form" initialValues={initialCredential} onFinish={onLogin}>
         <Form.Item
           name="username"
-          label="Username"
+          label="아이디"
           rules={[
             {
               required: true,
@@ -117,15 +82,7 @@ export const LoginForm = (props) => {
           name="password"
           label={
             <div className={`${showForgetPassword ? "d-flex justify-content-between w-100 align-items-center" : ""}`}>
-              <span>Password</span>
-              {showForgetPassword && (
-                <span
-                  onClick={() => onForgetPasswordClick}
-                  className="cursor-pointer font-size-sm font-weight-normal text-muted"
-                >
-                  Forget Password?
-                </span>
-              )}
+              <span>비밀번호</span>
             </div>
           }
           rules={[
@@ -139,7 +96,7 @@ export const LoginForm = (props) => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" block loading={loading}>
-            Sign In
+            로그인
           </Button>
         </Form.Item>
         {otherSignIn ? renderOtherSignIn : null}
@@ -170,8 +127,6 @@ const mapDispatchToProps = {
   showAuthMessage,
   showLoading,
   hideAuthMessage,
-  signInWithGoogle,
-  signInWithFacebook,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

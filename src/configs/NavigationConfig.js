@@ -80,24 +80,7 @@ const salesNavTree = [
         title: "sidenav.customers",
         icon: TeamOutlined,
         breadcrumb: false,
-        submenu: [
-          {
-            key: "customers-default",
-            path: `${APP_PREFIX_PATH}/customers/default`,
-            title: "sidenav.customers.default",
-            icon: TeamOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: "customers-create",
-            path: `${APP_PREFIX_PATH}/customers/create`,
-            title: "sidenav.customers.create",
-            icon: UserAddOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-        ],
+        submenu: [],
       },
       {
         key: "products",
@@ -112,14 +95,6 @@ const salesNavTree = [
             title: "sidenav.products.default",
             icon: ShoppingCartOutlined,
             breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: "products-create",
-            path: `${APP_PREFIX_PATH}/products/create`,
-            title: "sidenav.products.create",
-            icon: FileAddOutlined,
-            breadcrumb: true,
             submenu: [],
           },
           {
@@ -145,14 +120,14 @@ const extraNavTree = [
     submenu: [
       {
         key: "farms",
-        path: `${APP_PREFIX_PATH}/farms`,
+        path: `${APP_PREFIX_PATH}/events/farms`,
         title: "sidenav.farms",
         icon: AppstoreOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: "farms-default",
-            path: `${APP_PREFIX_PATH}/farms/default`,
+            path: `${APP_PREFIX_PATH}/events/farms`,
             title: "sidenav.farms.default",
             icon: AppstoreOutlined,
             breadcrumb: false,
@@ -160,7 +135,7 @@ const extraNavTree = [
           },
           {
             key: "farms-create",
-            path: `${APP_PREFIX_PATH}/farms/create`,
+            path: `${APP_PREFIX_PATH}/events/farm/create`,
             title: "sidenav.farms.create",
             icon: AppstoreAddOutlined,
             breadcrumb: false,
