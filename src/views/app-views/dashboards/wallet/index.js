@@ -89,7 +89,7 @@ export const Wallet = (props) => {
     <>
       <Row>
         <Col xs={24} sm={24} md={24} lg={24}>
-          {loading == false ? (
+          {loading == false && wallet ? (
             <Row gutter={16}>
               <Col xs={24} sm={24} md={24} lg={24} xl={8}>
                 <StatisticWidget
@@ -145,7 +145,7 @@ export const Wallet = (props) => {
                 <Select.Option value="expense">출금</Select.Option>
               </Select>
             </Row>
-            {loading == false ? (
+            {loading == false && transaction ? (
               <Table
                 className="no-border-last"
                 columns={tableColumns}

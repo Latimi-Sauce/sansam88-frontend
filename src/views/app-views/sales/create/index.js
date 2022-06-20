@@ -1,125 +1,140 @@
 import React, { useState, useEffect } from "react";
-import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
-import { Tabs, Form, Button, message } from "antd";
-import Flex from "components/shared-components/Flex";
-import ProductListData from "assets/data/product-list.data.json";
-import GeneralField from "./GeneralField";
-
-const { TabPane } = Tabs;
-
-const getBase64 = (img, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-};
-
-const ADD = "ADD";
-const EDIT = "EDIT";
+import { Form, Button, message, Card, Input, Row, Select } from "antd";
+import TextArea from "antd/lib/input/TextArea";
+import CustomerModal from "../components/CustomerModal";
+import { connect, createDispatchHook } from "react-redux";
+import { createOrder, getCustomerList, resetProject } from "redux/actions/Project";
+import { useHistory } from "react-router-dom";
 
 const ProductCreate = (props) => {
-  const { mode = ADD, param } = props;
-
-  const [form] = Form.useForm();
-  const [uploadedImg, setImage] = useState("");
-  const [uploadLoading, setUploadLoading] = useState(false);
-  const [submitLoading, setSubmitLoading] = useState(false);
+  const { loading, customerList, getCustomerList, resetProject, createOrder, orderPk } = props;
+  const [visible, setVisible] = useState();
+  const [fields, setFields] = useState();
+  const history = useHistory();
+  const onFinish = (data) => {
+    createOrder(data);
+  };
+  const showModal = () => {
+    setVisible(true);
+  };
 
   useEffect(() => {
-    if (mode === EDIT) {
-      console.log("is edit");
-      console.log("props", props);
-      const { id } = param;
-      const produtId = parseInt(id);
-      const productData = ProductListData.filter((product) => product.id === produtId);
-      const product = productData[0];
-      form.setFieldsValue({
-        comparePrice: 0.0,
-        cost: 0.0,
-        taxRate: 6,
-        description: "There are many variations of passages of Lorem Ipsum available.",
-        category: product.category,
-        name: product.name,
-        price: product.price,
-      });
-      setImage(product.image);
+    if (orderPk) {
+      history.push({ pathname: "/app/sales/select", state: { orderPk } });
     }
-  }, [form, mode, param, props]);
+  }, [orderPk]);
 
-  const handleUploadChange = (info) => {
-    if (info.file.status === "uploading") {
-      setUploadLoading(true);
-      return;
+  const handleOk = (customer) => {
+    if (customer) {
+      setFields([
+        {
+          name: ["customer"],
+          value: customer.id,
+        },
+        {
+          name: ["customerName"],
+          value: customer.name,
+        },
+        {
+          name: ["receiver"],
+          value: customer.name,
+        },
+        {
+          name: ["address"],
+          value: customer.address,
+        },
+      ]);
     }
-    if (info.file.status === "done") {
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        setImage(imageUrl);
-        setUploadLoading(true);
-      });
-    }
+    setVisible(false);
   };
 
-  const onFinish = () => {
-    setSubmitLoading(true);
-    form
-      .validateFields()
-      .then((values) => {
-        setTimeout(() => {
-          setSubmitLoading(false);
-          if (mode === ADD) {
-            message.success(`Created ${values.name} to product list`);
-          }
-          if (mode === EDIT) {
-            message.success(`Product saved`);
-          }
-        }, 1500);
-      })
-      .catch((info) => {
-        setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
-      });
+  const handleCancel = (e) => {
+    setVisible(false);
   };
+  useEffect(() => {
+    getCustomerList();
+    return () => {
+      resetProject();
+    };
+  }, []);
 
   return (
     <>
-      <Form
-        layout="vertical"
-        form={form}
-        name="advanced_search"
-        className="ant-advanced-search-form"
-        initialValues={{
-          heightUnit: "cm",
-          widthUnit: "cm",
-          weightUnit: "kg",
-        }}
-      >
-        <PageHeaderAlt className="border-bottom" overlap>
-          <div className="container">
-            <Flex className="py-2" mobileFlex={false} justifyContent="between" alignItems="center">
-              <h2 className="mb-3">{mode === "ADD" ? "주문 추가하기" : `주문 수정하기`} </h2>
-              <div className="mb-3">
-                <Button className="mr-2">취소</Button>
-                <Button type="primary" onClick={() => onFinish()} htmlType="submit" loading={submitLoading}>
-                  {mode === "ADD" ? "저장" : `Save`}
-                </Button>
-              </div>
-            </Flex>
-          </div>
-        </PageHeaderAlt>
-        <div className="container">
-          <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
-            <TabPane tab="General" key="1">
-              <GeneralField
-                uploadedImg={uploadedImg}
-                uploadLoading={uploadLoading}
-                handleUploadChange={handleUploadChange}
-              />
-            </TabPane>
-          </Tabs>
-        </div>
-      </Form>
+      <Card title={"주문 추가하기(고객)"}>
+        <Form fields={fields} onFinish={onFinish}>
+          <Form.Item name={"customer"} hidden>
+            <Input></Input>
+          </Form.Item>
+          <Row justify={"end"}>
+            <Button type={"primary"} onClick={showModal}>
+              고객 찾기
+            </Button>
+          </Row>
+          <Form.Item
+            name={"customerName"}
+            label={"고객이름"}
+            message={"hi"}
+            rules={[{ required: true, message: "고객을 입력해주세요" }]}
+          >
+            <Input disabled></Input>
+          </Form.Item>
+          <Form.Item
+            name={"receiver"}
+            label={"받는사람"}
+            placeholder={"받는 사람 이름"}
+            rules={[{ required: true, message: "받는사람을 입력해주세요" }]}
+          >
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name={"address"} label={"주소"} rules={[{ required: true, message: "주소를 입력해주세요" }]}>
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name={"customerMemo"} initialValue={" "} label={"고객 메모"}>
+            <TextArea></TextArea>
+          </Form.Item>
+          <Form.Item name={"sellerMemo"} initialValue={" "} label={"판매자 메모"}>
+            <TextArea></TextArea>
+          </Form.Item>
+          <Form.Item name={"isDelivered"} initialValue={true} label={"배달 현황"}>
+            <Select>
+              <Select.Option value={true}>배달 완료</Select.Option>
+              <Select.Option value={false}>배달 대기</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item name={"isPaid"} initialValue={true} label={"결제 현황"}>
+            <Select>
+              <Select.Option value={true}>결제 완료</Select.Option>
+              <Select.Option value={false}>결제 대기</Select.Option>
+            </Select>
+          </Form.Item>
+          <Row justify="end">
+            <Button type="primary" htmlType="submit">
+              다음
+            </Button>
+          </Row>
+        </Form>
+      </Card>
+      <CustomerModal
+        visible={visible}
+        customerList={customerList}
+        showModal={showModal}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        getCustomerList={getCustomerList}
+      />
     </>
   );
 };
 
-export default ProductCreate;
+const mapStateToProps = ({ project }) => {
+  const { loading, customerList, orderPk } = project;
+  return { loading, customerList, orderPk };
+};
+
+const mapDispatchToProps = {
+  getCustomerList,
+  resetProject,
+  createOrder,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCreate);

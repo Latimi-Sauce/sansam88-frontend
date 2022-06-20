@@ -8,6 +8,7 @@ const sales = ({ match }) => {
       <Switch>
         <Route path={`${match.url}/default`} component={lazy(() => import(`./default`))} />
         <Route path={`${match.url}/create`} component={lazy(() => import(`./create`))} />
+        <Route path={`${match.url}/select`} component={lazy(() => import(`./create/selectProduct`))} />
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
     </Suspense>

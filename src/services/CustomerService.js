@@ -33,7 +33,7 @@ CustomerService.getCustomer = function (pk) {
 CustomerService.putCustomer = function (data) {
   console.log(data);
   return fetch({
-    url: `api/v1/customers/update/${data.id}`,
+    url: `/api/v1/customers/update/${data.id}`,
     method: "put",
     data: data,
   });
@@ -41,7 +41,7 @@ CustomerService.putCustomer = function (data) {
 
 CustomerService.deleteCustomer = function (pk) {
   return fetch({
-    url: `api/v1/customers/delete/${pk}`,
+    url: `/api/v1/customers/delete/${pk}`,
     method: "delete",
   });
 };

@@ -19,58 +19,7 @@ import { useHistory } from "react-router-dom";
 export const Farms = (props) => {
   const { loading, resetProject, getCustomerList, updateCustomer, deleteCustomer, createCustomer, customerList } =
     props;
-  const [detail, setDetail] = useState();
-  const [detailModal, setDetailModal] = useState(false);
   const history = useHistory();
-  const handleOk = (e) => {
-    setDetailModal(false);
-  };
-  const handleCreate = (values) => {
-    values.phoneNumber = values.phoneNumber.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
-    createCustomer(values);
-    setDetailModal(false);
-  };
-  const handleCancel = (e) => {
-    setDetailModal(false);
-  };
-  const onUpdate = (values) => {
-    values.phoneNumber = values.phoneNumber.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
-    updateCustomer(values);
-    setDetailModal(false);
-  };
-  const onDelete = (values) => {
-    Swal.fire({
-      title: "삭제하시겠습니까?",
-      text: "삭제하면 되돌릴수 없습니다.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "예",
-      cancelButtonText: "아니오",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteCustomer(values);
-        Swal.fire("삭제 완료", "정상적으로 삭제 되었습니다.", "success");
-        setDetailModal(false);
-      }
-    });
-  };
-
-  const showDetailModal = (record) => {
-    setDetail(record);
-    setDetailModal(true);
-  };
-  const onSearch = (e) => {
-    const value = e.currentTarget.value;
-    getCustomerList(value);
-  };
-
-  const initializeList = (e) => {
-    if (e.currentTarget.value === "") {
-      getCustomerList();
-    }
-  };
   const goToDiary = () => {
     history.push("/app/events/farm/1");
   };

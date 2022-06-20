@@ -67,7 +67,7 @@ export const DetailModal = ({
         </Form.Item>
         <Form.Item
           name={"category"}
-          initialValue={detail ? detail.category : category.result[0].id}
+          initialValue={detail ? detail.category : null}
           label="카테고리"
           rules={[{ required: true }]}
         >

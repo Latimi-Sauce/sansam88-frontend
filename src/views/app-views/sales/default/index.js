@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { DetailModal, RecentOrder } from "../components/Sales";
-import { getOrderList, getOrder, resetProject } from "redux/actions/Project";
+import {
+  deleteOrder,
+  getOrderImages,
+  getOrderItems,
+  getOrderList,
+  resetProject,
+  updateOrder,
+} from "redux/actions/Project";
 import { connect } from "react-redux";
 import Swal from "sweetalert2";
 
 export const SalesList = (props) => {
-  const { loading, order, getOrderList, resetProject } = props;
+  const {
+    loading,
+    order,
+    getOrderList,
+    resetProject,
+    getOrderImages,
+    getOrderItems,
+    deleteOrder,
+    orderItems,
+    updateOrder,
+    orderImages,
+  } = props;
   const [detailModal, setDetailModal] = useState();
   const [detail, setDetail] = useState();
+  const [fields, setFields] = useState();
   const handleOk = () => {
     setDetailModal(false);
   };
@@ -18,7 +37,7 @@ export const SalesList = (props) => {
     setDetailModal(false);
   };
   const onUpdate = (values) => {
-    // updateCustomer(values);
+    updateOrder(values);
     setDetailModal(false);
   };
   const onDelete = (values) => {
@@ -33,7 +52,7 @@ export const SalesList = (props) => {
       cancelButtonText: "아니오",
     }).then((result) => {
       if (result.isConfirmed) {
-        // deleteCustomer(values);
+        deleteOrder(values);
         Swal.fire("삭제 완료", "정상적으로 삭제 되었습니다.", "success");
         setDetailModal(false);
       }
@@ -41,6 +60,30 @@ export const SalesList = (props) => {
   };
 
   const showDetailModal = (record) => {
+    getOrderItems(record.id);
+    getOrderImages(record.id);
+    setFields([
+      {
+        name: ["address"],
+        value: record.address,
+      },
+      {
+        name: ["isPaid"],
+        value: record.isPaid,
+      },
+      {
+        name: ["isDelivered"],
+        value: record.isDelivered,
+      },
+      {
+        name: ["sellerMemo"],
+        value: record.sellerMemo,
+      },
+      {
+        name: ["customerMemo"],
+        value: record.customerMemo,
+      },
+    ]);
     setDetail(record);
     setDetailModal(true);
   };
@@ -54,7 +97,12 @@ export const SalesList = (props) => {
     <>
       <div>
         {loading == false ? (
-          <RecentOrder recentOrderData={order.result} getOrderList={getOrderList} showDetailModal={showDetailModal} />
+          <RecentOrder
+            pages={order ? order.pages : ""}
+            recentOrderData={order ? order.result : ""}
+            getOrderList={getOrderList}
+            showDetailModal={showDetailModal}
+          />
         ) : (
           ""
         )}
@@ -69,6 +117,9 @@ export const SalesList = (props) => {
           detail={detail}
           setDetail={setDetail}
           onCreate={handleCreate}
+          fields={fields}
+          orderItems={orderItems}
+          orderImages={orderImages}
         />
       ) : (
         ""
@@ -78,14 +129,17 @@ export const SalesList = (props) => {
 };
 
 const mapStateToProps = ({ project }) => {
-  const { loading, order } = project;
-  return { loading, order };
+  const { loading, order, orderItems, orderImages } = project;
+  return { loading, order, orderItems, orderImages };
 };
 
 const mapDispatchToProps = {
   getOrderList,
-  getOrder,
   resetProject,
+  getOrderImages,
+  getOrderItems,
+  deleteOrder,
+  updateOrder,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SalesList);

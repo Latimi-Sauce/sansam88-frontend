@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Card, Form, Image, Input, InputNumber, Modal, Row, Select, Table, Tag } from "antd";
+import { Badge, Button, Card, Carousel, Form, Image, Input, InputNumber, Modal, Row, Select, Table, Tag } from "antd";
 import { SearchOutlined, FileExcelOutlined } from "@ant-design/icons";
 import AvatarStatus from "components/shared-components/AvatarStatus";
 import Flex from "components/shared-components/Flex";
 import NumberFormat from "react-number-format";
 import moment from "moment";
-import Utils from "utils";
-import Title from "antd/lib/skeleton/Title";
+import utils from "utils";
+import TextArea from "antd/lib/input/TextArea";
+import { API_BASE_URL } from "configs/AppConfig";
+import { useHistory } from "react-router-dom";
 
 const getPaymentStatus = (status) => {
   if (status === true) {
@@ -41,6 +43,7 @@ export const orderTableColumns = [
         <AvatarStatus size={30} name={record.customerName} />
       </Flex>
     ),
+    sorter: (a, b) => utils.antdTableSorter(a, b, "customerName"),
   },
   {
     title: "받는 사람",
@@ -50,11 +53,13 @@ export const orderTableColumns = [
         <AvatarStatus size={30} name={record.receiver} />
       </Flex>
     ),
+    sorter: (a, b) => utils.antdTableSorter(a, b, "receiver"),
   },
   {
     title: "날짜",
     dataIndex: "created",
     render: (_, record) => <span>{moment(record.created).format("YYYY-MM-DD")}</span>,
+    sorter: (a, b) => utils.antdTableSorter(a, b, "created"),
   },
   {
     title: "주문 현황",
@@ -64,6 +69,7 @@ export const orderTableColumns = [
         <Tag color={getShippingStatus(record.isDelivered)}>{record.isDelivered ? "배송 완료" : "배송 대기"}</Tag>
       </>
     ),
+    sorter: (a, b) => utils.antdTableSorter(a, b, "orderStatus"),
   },
   {
     title: "결제 현황",
@@ -74,6 +80,7 @@ export const orderTableColumns = [
         <span>{record.isPaid ? "결제 완료" : "결제 대기"}</span>
       </>
     ),
+    sorter: (a, b) => utils.antdTableSorter(a, b, "paymentStatus"),
   },
   {
     title: "총 가격",
@@ -86,10 +93,10 @@ export const orderTableColumns = [
   },
 ];
 
-export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal }) => {
-  const [list, setList] = useState(recentOrderData);
+export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal, pages }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const history = useHistory();
   const paymentStatusList = [
     {
       name: "결제 완료",
@@ -105,18 +112,19 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal }) 
   };
   const onSearch = (e) => {
     const value = e.currentTarget.value;
-    getOrderList(value);
+    if (value === "") {
+      getOrderList();
+    } else {
+      getOrderList(value);
+    }
     setSelectedRowKeys([]);
+  };
+  const handlePage = (page) => {
+    getOrderList(page.current);
   };
 
   const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "isPaid";
-      const data = Utils.filterArray(recentOrderData, key, value);
-      setList(data);
-    } else {
-      setList(recentOrderData);
-    }
+    getOrderList(value);
   };
   return (
     <Card title="주문내역">
@@ -133,7 +141,7 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal }) 
               onChange={handleShowStatus}
               placeholder="Status"
             >
-              <Select.Option value="All">전체 </Select.Option>
+              <Select.Option value="">전체 </Select.Option>
               {paymentStatusList.map((elm) => (
                 <Select.Option key={elm.value} value={elm.value}>
                   {elm.name}
@@ -147,7 +155,10 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal }) 
             type="primary"
             icon={<FileExcelOutlined />}
             onClick={() => {
-              console.log(selectedRows);
+              if (selectedRows.length != 0) {
+                console.log(selectedRows);
+                history.push({ pathname: "/app/events/invoice", state: { selectedRows } });
+              }
             }}
             block
           >
@@ -156,9 +167,9 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal }) 
         </div>
       </Flex>
       <Table
-        pagination={true}
+        pagination={{ total: pages * 10 }}
         columns={orderTableColumns}
-        dataSource={list ? list : recentOrderData}
+        dataSource={recentOrderData}
         rowSelection={{
           selectedRowKeys: selectedRowKeys,
           type: "checkbox",
@@ -172,13 +183,26 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal }) 
             },
           };
         }}
+        onChange={handlePage}
         rowKey="id"
       />
     </Card>
   );
 };
 
-export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, onUpdate, detail, onCreate, setDetail }) => {
+export const DetailModal = ({
+  handleOk,
+  handleCancel,
+  modal,
+  onDelete,
+  onUpdate,
+  detail,
+  onCreate,
+  setDetail,
+  fields,
+  orderItems,
+  orderImages,
+}) => {
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -190,6 +214,28 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, onUpdate,
       number: "숫자를 입력해 주세요",
     },
   };
+  const columns = [
+    {
+      title: "상품",
+      dataIndex: "product",
+    },
+    {
+      title: "갯수",
+      dataIndex: "qty",
+    },
+    {
+      title: "가격",
+      dataIndex: "price",
+    },
+  ];
+  const contentStyle = {
+    height: "160px",
+    color: "#fff",
+    lineHeight: "160px",
+    textAlign: "center",
+    background: "#364d79",
+  };
+
   useEffect(() => {
     return () => {
       detail = "null";
@@ -203,9 +249,6 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, onUpdate,
       onOk={handleOk}
       onCancel={handleCancel}
       footer={[
-        <Button key={"update"} type="primary" htmlType="submit">
-          수정
-        </Button>,
         <Button
           type="danger"
           key={"delete"}
@@ -220,26 +263,21 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, onUpdate,
         </Button>,
       ]}
     >
-      <Row justify="center" className="mb-20">
-        <Image width={200} src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-      </Row>
       <Form
         {...layout}
+        fields={fields}
         name="addTransaction"
-        onFinish={detail ? onUpdate : onCreate}
+        onFinish={onUpdate}
         validateMessages={validateMessages}
         style={{ marginTop: "10px" }}
       >
-        <Form.Item name={"id"} initialValue={detail ? detail.id : null} style={{ display: "none" }}>
+        <Form.Item name={"id"} initialValue={detail ? detail.id : null} hidden>
           <InputNumber disabled />
         </Form.Item>
-        <Form.Item
-          justify={"center"}
-          name={"isPaid"}
-          initialValue={detail ? detail.isPaid : ""}
-          style={{ marginLeft: "-30%" }}
-          label="결제"
-        >
+        <Form.Item name={"address"} label={"주소"} style={{ marginLeft: "-30%" }}>
+          <Input />
+        </Form.Item>
+        <Form.Item justify={"center"} name={"isPaid"} style={{ marginLeft: "-30%" }} label="결제">
           <Select>
             <Select.Option value={true} style={{ color: "green" }}>
               결제 완료
@@ -260,20 +298,28 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, onUpdate,
             <Select.Option value={false}>배달 대기 </Select.Option>
           </Select>
         </Form.Item>
-        <Card>
-          <Row>
-            <span>판매자</span>
-            <div>{detail ? detail.sellerMemo : ""}</div>
-          </Row>
-        </Card>
-        <Card>
-          <Row>
-            <span>고객</span>
-            <div>{detail ? detail.customerMemo : ""}</div>
-          </Row>
-        </Card>
-        <Table />
+        <Form.Item name={"sellerMemo"} label={"판매자 메모"} style={{ marginLeft: "-20%" }}>
+          <TextArea />
+        </Form.Item>
+        <Form.Item name={"customerMemo"} label={"판매자 메모"} style={{ marginLeft: "-20%" }}>
+          <TextArea />
+        </Form.Item>
+        <Table columns={columns} rowKey={"id"} dataSource={orderItems} />
+        <Row justify="center">
+          <Button key={"update"} type="primary" style={{ marginBottom: "16px" }} htmlType="submit">
+            수정
+          </Button>
+        </Row>
       </Form>
+      {orderImages ? (
+        <Carousel autoplay>
+          {orderImages.map((i) => (
+            <Image key={i.id} src={`${API_BASE_URL}/${i.image}`}></Image>
+          ))}
+        </Carousel>
+      ) : (
+        ""
+      )}
     </Modal>
   );
 };

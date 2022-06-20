@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Badge, Button, Card, Form, Input, InputNumber, Modal, Select, Table, Tag } from "antd";
 import AvatarStatus from "components/shared-components/AvatarStatus";
 import Flex from "components/shared-components/Flex";
+import utils from "utils";
 
 export const customerTableColumn = [
   {
@@ -16,11 +17,13 @@ export const customerTableColumn = [
         <AvatarStatus size={30} name={record.name} subTitle={record.company} />
       </Flex>
     ),
+    sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
   },
   {
     title: "주소",
     dataIndex: "address",
     render: (_, record) => <span>{record.address}</span>,
+    sorter: (a, b) => utils.antdTableSorter(a, b, "address"),
   },
   {
     title: "전화번호",
@@ -42,12 +45,13 @@ export const customerTableColumn = [
   },
   {
     title: "누적 구매",
-    dataIndex: "price",
+    dataIndex: "totalSpend",
     render: (_, record) => <span className="font-weight-semibold">{record.totalSpend}</span>,
+    sorter: (a, b) => utils.antdTableSorter(a, b, "totalSpend"),
   },
   {
     title: "소개자",
-    dataIndex: "price",
+    dataIndex: "reference",
     render: (_, record) => <span className="font-weight-semibold">{record.reference}</span>,
   },
 ];

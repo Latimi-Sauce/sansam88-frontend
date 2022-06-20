@@ -146,16 +146,8 @@ const extraNavTree = [
     ],
   },
   {
-    key: "calendar",
-    path: `${APP_PREFIX_PATH}/events/calendar`,
-    title: "sidenav.events.calendar",
-    icon: CalendarOutlined,
-    breadcrumb: false,
-    submenu: [],
-  },
-  {
     key: "events-delivery",
-    path: `${APP_PREFIX_PATH}/events/delivery`,
+    path: `${APP_PREFIX_PATH}/events/invoice`,
     title: "sidenav.events.delivery",
     icon: DropboxOutlined,
     breadcrumb: false,

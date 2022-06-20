@@ -8,23 +8,29 @@ import {
   CREATE_ACCOUNT,
   CREATE_CATEGORY,
   CREATE_CUSTOMER,
+  CREATE_ORDER,
+  CREATE_ORDERIMAGE,
+  CREATE_ORDERITEM,
   CREATE_PRODUCT,
   DASHBOARD,
   DELETE_CATEGORY,
   DELETE_CUSTOMER,
+  DELETE_ORDER,
   DELETE_PRODUCT,
   DELETE_TRANSACTION,
   GET_ACCOUNT_FAIL,
   GET_ACCOUNT_SUCCESS,
   GET_CATEGORY_LIST,
-  GET_CUSTOMER,
   GET_CUSTOMERLIST_FAIL,
   GET_CUSTOMERLIST_SUCCESS,
   GET_CUSTOMER_FAIL,
   GET_CUSTOMER_LIST,
-  GET_CUSTOMER_SUCCESS,
   GET_DASHBOARD_FAIL,
   GET_DASHBOARD_SUCCESS,
+  GET_ORDERIMAGES,
+  GET_ORDERIMAGE_SUCCESS,
+  GET_ORDERITEMS,
+  GET_ORDERITEMS_SUCCESS,
   GET_ORDER_FAIL,
   GET_ORDER_LIST,
   GET_ORDER_SUCCESS,
@@ -35,6 +41,7 @@ import {
   RESET_PROJECT,
   UPDATE_CATEGORY,
   UPDATE_CUSTOEMR,
+  UPDATE_ORDER,
   UPDATE_PRODUCT,
   UPDATE_TRANSACTION,
 } from "redux/constants/Project";
@@ -42,6 +49,7 @@ import SaleService from "services/SaleService";
 import CustomerService from "services/CustomerService";
 import ProductService from "services/ProductService";
 import CategoryService from "services/CategoryService";
+import OrderService from "services/OrderService";
 
 export function* dashboard() {
   yield takeEvery(DASHBOARD, function* () {
@@ -117,7 +125,6 @@ export function* deleteTransaction() {
 export function* getOrderList() {
   yield takeEvery(GET_ORDER_LIST, function* (payload) {
     try {
-      yield put({ type: LOADING });
       const orderList = yield call(SaleService.getOrderList, payload.data);
       yield put({ type: GET_ORDER_SUCCESS, orderList });
     } catch (err) {
@@ -251,6 +258,73 @@ export function* category() {
   });
 }
 
+//ORDER
+export function* order() {
+  yield takeEvery(CREATE_ORDER, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      const orderPk = yield call(OrderService.postOrder, payload.data);
+      yield put({ type: GET_ORDER_SUCCESS, orderPk });
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+  yield takeEvery(UPDATE_ORDER, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      yield call(OrderService.putOrder, payload.data);
+      yield put({ type: GET_ORDER_LIST });
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+  yield takeEvery(DELETE_ORDER, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      yield call(OrderService.deleteOrder, payload.pk);
+      yield put({ type: GET_ORDER_LIST });
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+  yield takeEvery(CREATE_ORDERITEM, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      yield call(OrderService.postOrderItem, payload.data);
+      yield put({ type: GET_ORDER_SUCCESS });
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+  yield takeEvery(CREATE_ORDERIMAGE, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      yield call(OrderService.postOrderImage, payload.data);
+      yield put({ type: GET_ORDER_SUCCESS });
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+  yield takeEvery(GET_ORDERIMAGES, function* (payload) {
+    try {
+      const data = yield call(OrderService.getOrderImages, payload.data);
+      yield put({ type: GET_ORDERIMAGE_SUCCESS, data });
+      yield put({ type: GET_ORDER_LIST });
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+  yield takeEvery(GET_ORDERITEMS, function* (payload) {
+    try {
+      const data = yield call(OrderService.getOrderItems, payload.data);
+      yield put({ type: GET_ORDERITEMS_SUCCESS, data });
+      yield put({ type: GET_ORDER_LIST });
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(account),
@@ -259,6 +333,7 @@ export default function* rootSaga() {
     fork(updateTransaction),
     fork(deleteTransaction),
     fork(getOrderList),
+    fork(order),
     fork(customer),
     fork(product),
     fork(category),

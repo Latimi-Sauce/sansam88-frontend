@@ -1,13 +1,13 @@
 const dev = {
-  API_ENDPOINT_URL: "http://175.45.192.116",
+  API_ENDPOINT_URL: "http://localhost:8000",
 };
 
 const prod = {
-  API_ENDPOINT_URL: "http://175.45.192.116",
+  API_ENDPOINT_URL: "http://localhost:8000",
 };
 
 const test = {
-  API_ENDPOINT_URL: "http://175.45.192.116",
+  API_ENDPOINT_URL: "http://localhost:8000",
 };
 
 const getEnv = () => {

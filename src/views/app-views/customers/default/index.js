@@ -94,7 +94,7 @@ export const Customers = (props) => {
           </Button>
         </div>
       </Flex>
-      {loading == false ? (
+      {loading == false && customerList ? (
         <CustomerList customerData={customerList.result} showDetailModal={showDetailModal} bordered={true} />
       ) : (
         ""

@@ -20,6 +20,13 @@ import {
   CREATE_CATEGORY,
   UPDATE_CATEGORY,
   DELETE_CATEGORY,
+  CREATE_ORDER,
+  UPDATE_ORDER,
+  DELETE_ORDER,
+  CREATE_ORDERITEM,
+  CREATE_ORDERIMAGE,
+  GET_ORDERIMAGES,
+  GET_ORDERITEMS,
 } from "../constants/Project";
 
 export const dashboard = () => {
@@ -72,10 +79,52 @@ export const getOrderList = (data) => {
   };
 };
 
-export const getOrder = (pk) => {
+export const getOrderImages = (data) => {
   return {
-    type: GET_ORDER,
+    type: GET_ORDERIMAGES,
+    data: data,
+  };
+};
+
+export const getOrderItems = (data) => {
+  return {
+    type: GET_ORDERITEMS,
+    data: data,
+  };
+};
+
+export const createOrder = (data) => {
+  return {
+    type: CREATE_ORDER,
+    data,
+  };
+};
+
+export const createOrderItem = (data) => {
+  return {
+    type: CREATE_ORDERITEM,
+    data,
+  };
+};
+
+export const updateOrder = (data) => {
+  return {
+    type: UPDATE_ORDER,
+    data,
+  };
+};
+
+export const deleteOrder = (pk) => {
+  return {
+    type: DELETE_ORDER,
     pk,
+  };
+};
+
+export const createOrderImage = (data) => {
+  return {
+    type: CREATE_ORDERIMAGE,
+    data,
   };
 };
 

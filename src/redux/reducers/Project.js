@@ -10,6 +10,8 @@ import {
   GET_CUSTOMER_SUCCESS,
   GET_DASHBOARD_FAIL,
   GET_DASHBOARD_SUCCESS,
+  GET_ORDERIMAGE_SUCCESS,
+  GET_ORDERITEMS_SUCCESS,
   GET_ORDER_FAIL,
   GET_ORDER_LIST,
   GET_ORDER_SUCCESS,
@@ -57,6 +59,19 @@ const project = (state = initState, action) => {
         ...state,
         loading: false,
         order: action.orderList,
+        orderPk: action.orderPk,
+      };
+    case GET_ORDERIMAGE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        orderImages: action.data,
+      };
+    case GET_ORDERITEMS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        orderItems: action.data,
       };
     case GET_ORDER_FAIL:
       return {
