@@ -27,6 +27,14 @@ import {
   CREATE_ORDERIMAGE,
   GET_ORDERIMAGES,
   GET_ORDERITEMS,
+  GET_FARM_LIST,
+  CREATE_FARM,
+  UPDATE_FARM,
+  DELETE_FARM,
+  GET_LOG_LIST,
+  CREATE_LOG,
+  UPDATE_LOG,
+  DELETE_LOG,
 } from "../constants/Project";
 
 export const dashboard = () => {
@@ -219,5 +227,68 @@ export const deleteCategory = (pk) => {
   return {
     type: DELETE_CATEGORY,
     pk,
+  };
+};
+
+// Farms
+export const getFarmList = (data) => {
+  return {
+    type: GET_FARM_LIST,
+    data,
+  };
+};
+
+export const createFarm = (data) => {
+  return {
+    type: CREATE_FARM,
+    data,
+  };
+};
+
+export const updateFarm = (data) => {
+  return {
+    type: UPDATE_FARM,
+    data,
+  };
+};
+
+export const deleteFarm = (pk) => {
+  return {
+    type: DELETE_FARM,
+    pk,
+  };
+};
+
+//LOGS
+export const getLogList = (data, date, page) => {
+  return {
+    type: GET_LOG_LIST,
+    data,
+    date,
+    page,
+  };
+};
+
+export const createLog = (data, pk) => {
+  return {
+    type: CREATE_LOG,
+    data,
+    pk,
+  };
+};
+
+export const updateLog = (data, pk) => {
+  return {
+    type: UPDATE_LOG,
+    data,
+    pk,
+  };
+};
+
+export const deleteLog = (pk, logPk) => {
+  return {
+    type: DELETE_LOG,
+    pk,
+    logPk,
   };
 };

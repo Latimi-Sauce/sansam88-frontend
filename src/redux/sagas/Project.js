@@ -8,6 +8,8 @@ import {
   CREATE_ACCOUNT,
   CREATE_CATEGORY,
   CREATE_CUSTOMER,
+  CREATE_FARM,
+  CREATE_LOG,
   CREATE_ORDER,
   CREATE_ORDERIMAGE,
   CREATE_ORDERITEM,
@@ -15,9 +17,13 @@ import {
   DASHBOARD,
   DELETE_CATEGORY,
   DELETE_CUSTOMER,
+  DELETE_FARM,
+  DELETE_LOG,
   DELETE_ORDER,
   DELETE_PRODUCT,
   DELETE_TRANSACTION,
+  FARM_FAIL,
+  FARM_SUCCESS,
   GET_ACCOUNT_FAIL,
   GET_ACCOUNT_SUCCESS,
   GET_CATEGORY_LIST,
@@ -27,6 +33,8 @@ import {
   GET_CUSTOMER_LIST,
   GET_DASHBOARD_FAIL,
   GET_DASHBOARD_SUCCESS,
+  GET_FARM_LIST,
+  GET_LOG_LIST,
   GET_ORDERIMAGES,
   GET_ORDERIMAGE_SUCCESS,
   GET_ORDERITEMS,
@@ -36,11 +44,15 @@ import {
   GET_ORDER_SUCCESS,
   GET_PRODUCT_LIST,
   LOADING,
+  LOG_FAIL,
+  LOG_SUCCESS,
   PRODUCT_FAIL,
   PRODUCT_SUCCESS,
   RESET_PROJECT,
   UPDATE_CATEGORY,
   UPDATE_CUSTOEMR,
+  UPDATE_FARM,
+  UPDATE_LOG,
   UPDATE_ORDER,
   UPDATE_PRODUCT,
   UPDATE_TRANSACTION,
@@ -50,6 +62,9 @@ import CustomerService from "services/CustomerService";
 import ProductService from "services/ProductService";
 import CategoryService from "services/CategoryService";
 import OrderService from "services/OrderService";
+import FarmService from "services/FarmService";
+import { Fragment } from "react";
+import LogService from "services/LogService";
 
 export function* dashboard() {
   yield takeEvery(DASHBOARD, function* () {
@@ -325,6 +340,90 @@ export function* order() {
   });
 }
 
+//FARM
+export function* farm() {
+  yield takeEvery(GET_FARM_LIST, function* () {
+    try {
+      yield put({ type: LOADING });
+      const data = yield call(FarmService.getFarmList);
+      yield put({ type: FARM_SUCCESS, data });
+    } catch (err) {
+      yield put({ type: FARM_FAIL, err });
+    }
+  });
+  yield takeEvery(CREATE_FARM, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      const farmPk = yield call(FarmService.postFarm, payload.data);
+      yield put({ type: FARM_SUCCESS, farmPk });
+    } catch (err) {
+      yield put({ type: FARM_FAIL, err });
+    }
+  });
+  yield takeEvery(UPDATE_FARM, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      yield call(FarmService.putFarm, payload.data);
+      yield put({ type: GET_FARM_LIST });
+    } catch (err) {
+      yield put({ type: FARM_FAIL, err });
+    }
+  });
+  yield takeEvery(DELETE_FARM, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      yield call(FarmService.deleteFarm, payload.pk);
+      yield put({ type: GET_FARM_LIST });
+    } catch (err) {
+      yield put({ type: FARM_FAIL, err });
+    }
+  });
+}
+
+//LOG(영농일지)
+export function* Log() {
+  yield takeEvery(GET_LOG_LIST, function* (payload) {
+    try {
+      let date = payload.date;
+      if (date === undefined) {
+        date = null;
+      }
+      const data = yield call(LogService.getLogList, payload.data, date, payload.page);
+      yield put({ type: LOG_SUCCESS, data });
+    } catch (err) {
+      yield put({ type: LOG_FAIL, err });
+    }
+  });
+  yield takeEvery(CREATE_LOG, function* (payload) {
+    try {
+      const logPk = yield call(LogService.postLog, payload.data, payload.pk);
+      const data = yield call(LogService.getLogList, payload.pk);
+      yield put({ type: LOG_SUCCESS, data, logPk });
+    } catch (err) {
+      yield put({ type: LOG_FAIL, err });
+    }
+  });
+  yield takeEvery(UPDATE_LOG, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      yield call(LogService.putLog, payload.data, payload.pk);
+      const data = yield call(LogService.getLogList, payload.pk);
+      yield put({ type: LOG_SUCCESS, data });
+    } catch (err) {
+      yield put({ type: LOG_FAIL, err });
+    }
+  });
+  yield takeEvery(DELETE_LOG, function* (payload) {
+    try {
+      yield call(LogService.deleteLog, payload.pk);
+      const data = yield call(LogService.getLogList, payload.logPk);
+      yield put({ type: LOG_SUCCESS, data });
+    } catch (err) {
+      yield put({ type: LOG_FAIL, err });
+    }
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(account),
@@ -337,5 +436,7 @@ export default function* rootSaga() {
     fork(customer),
     fork(product),
     fork(category),
+    fork(farm),
+    fork(Log),
   ]);
 }

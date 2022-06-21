@@ -145,30 +145,6 @@ const extraNavTree = [
       },
     ],
   },
-  {
-    key: "events-delivery",
-    path: `${APP_PREFIX_PATH}/events/invoice`,
-    title: "sidenav.events.delivery",
-    icon: DropboxOutlined,
-    breadcrumb: false,
-    submenu: [],
-  },
-  {
-    key: "delivery-create",
-    path: `${APP_PREFIX_PATH}/events/delivery/create`,
-    title: "sidenav.events.delivery.create",
-    icon: MedicineBoxOutlined,
-    breadcrumb: false,
-    submenu: [],
-  },
-  {
-    key: "events-sns",
-    path: `${APP_PREFIX_PATH}/events/sns`,
-    title: "sidenav.events.sns",
-    icon: MessageOutlined,
-    breadcrumb: false,
-    submenu: [],
-  },
 ];
 
 const navigationConfig = [...dashBoardNavTree, ...salesNavTree, ...extraNavTree];

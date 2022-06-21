@@ -1,6 +1,8 @@
 import {
   CATEGORY_FAIL,
   CATEGORY_SUCCESS,
+  FARM_FAIL,
+  FARM_SUCCESS,
   GET_ACCOUNT_FAIL,
   GET_ACCOUNT_SUCCESS,
   GET_CUSTOMER,
@@ -16,6 +18,8 @@ import {
   GET_ORDER_LIST,
   GET_ORDER_SUCCESS,
   LOADING,
+  LOG_FAIL,
+  LOG_SUCCESS,
   PRODUCT_FAIL,
   PRODUCT_SUCCESS,
   RESET_PROJECT,
@@ -122,6 +126,32 @@ const project = (state = initState, action) => {
         category: action.data,
       };
     case CATEGORY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        message: action.err,
+      };
+    case FARM_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        farmList: action.data,
+        farmPk: action.farmPk,
+      };
+    case FARM_FAIL:
+      return {
+        ...state,
+        loading: false,
+        message: action.err,
+      };
+    case LOG_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        logList: action.data,
+        logPk: action.logPk,
+      };
+    case LOG_FAIL:
       return {
         ...state,
         loading: false,

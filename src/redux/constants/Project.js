@@ -54,3 +54,19 @@ export const UPDATE_CATEGORY = "UPDATE_CATEGORY";
 export const DELETE_CATEGORY = "DELETE_CATEGORY";
 export const CATEGORY_SUCCESS = "CATEGORY_SUCCESS";
 export const CATEGORY_FAIL = "CATEGORY_FAIL";
+
+//Farm
+export const GET_FARM_LIST = "GET_FARM_LIST";
+export const CREATE_FARM = "CREATE_FARM";
+export const UPDATE_FARM = "UPDATE_FARM";
+export const DELETE_FARM = "DELETE_FARM";
+export const FARM_SUCCESS = "FARM_SUCCESS";
+export const FARM_FAIL = "FARM_FAIL";
+
+//Logs
+export const GET_LOG_LIST = "GET_LOG_LIST";
+export const CREATE_LOG = "CREATE_LOG";
+export const UPDATE_LOG = "UPDATE_LOG";
+export const DELETE_LOG = "DELETE_LOG";
+export const LOG_SUCCESS = "LOG_SUCCESS";
+export const LOG_FAIL = "LOG_FAIL";

@@ -91,6 +91,7 @@ export const DefaultDashboard = (props) => {
                 {customer.list.map((elm, i) => (
                   <div key={i} className={`d-flex align-items-center justify-content-between mb-4`}>
                     <AvatarStatus id={i} name={elm.name} subTitle={elm.company} />
+
                     <div>{elm.totalSpend} 원</div>
                   </div>
                 ))}
