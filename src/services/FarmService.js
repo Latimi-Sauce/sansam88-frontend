@@ -17,7 +17,6 @@ FarmService.postFarm = function (data) {
   });
 };
 FarmService.putFarm = function (data) {
-  console.log(data);
   return fetch({
     url: `/api/v1/farms/update/${data.id}/`,
     method: "put",

@@ -1,13 +1,13 @@
 const dev = {
-  API_ENDPOINT_URL: "http://localhost:8000",
+  API_ENDPOINT_URL: "http://dev-sansam.ap-northeast-2.elasticbeanstalk.com",
 };
 
 const prod = {
-  API_ENDPOINT_URL: "http://localhost:8000",
+  API_ENDPOINT_URL: "http://dev-sansam.ap-northeast-2.elasticbeanstalk.com",
 };
 
 const test = {
-  API_ENDPOINT_URL: "http://localhost:8000",
+  API_ENDPOINT_URL: "http://dev-sansam.ap-northeast-2.elasticbeanstalk.com",
 };
 
 const getEnv = () => {

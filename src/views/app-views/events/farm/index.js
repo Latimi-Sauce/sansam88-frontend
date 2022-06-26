@@ -125,11 +125,7 @@ export const Farms = (props) => {
                         cover={
                           <img
                             alt="example"
-                            src={
-                              i.image
-                                ? `${API_BASE_URL}/${i.image}`
-                                : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-                            }
+                            src={i.image ? `${i.image}` : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"}
                           />
                         }
                         onClick={() => {
@@ -178,11 +174,7 @@ export const Farms = (props) => {
                     cover={
                       <img
                         alt="example"
-                        src={
-                          i.image
-                            ? `${API_BASE_URL}/${i.image}`
-                            : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-                        }
+                        src={i.image ? `${i.image}` : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"}
                       />
                     }
                     onClick={() => goToDiary(i.id, i.title)}

@@ -291,7 +291,7 @@ export const AddModal = ({ handleOk, handleCancel, onFinish, modal, logPk, id, s
       onOk={handleOk}
       onCancel={handleCancel}
       footer={[
-        <Button key="save" type="primary" onClick={() => setModal(false)}>
+        <Button key="save" type="primary" onClick={handleOk}>
           저장
         </Button>,
         <Button key="back" onClick={handleCancel}>
@@ -335,9 +335,6 @@ export const AddModal = ({ handleOk, handleCancel, onFinish, modal, logPk, id, s
             fileList={fileList}
             onPreview={handlePreview}
             onChange={handleChange}
-            onRemove={(e) => {
-              console.log(e);
-            }}
           >
             {fileList.length >= 1 ? null : uploadButton}
           </Upload>
@@ -366,7 +363,7 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, fields, o
   };
   useEffect(() => {
     return () => {
-      detail = "null";
+      detail = null;
     };
   }, []);
   return (
@@ -391,14 +388,13 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, fields, o
       ]}
     >
       <Row justify="center">
-        {console.log(detail.image)}
         <Image
           width={200}
           style={{ marginBottom: "10px" }}
           src={
             detail
               ? detail.image != null
-                ? `${API_BASE_URL}/${detail.image}`
+                ? `${detail.image}`
                 : "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
               : "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
           }
@@ -408,34 +404,19 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, fields, o
         <Form.Item name={"id"} initialValue={detail ? detail.id : null} hidden>
           <InputNumber disabled />
         </Form.Item>
-        <Form.Item name={"title"} initialValue={detail ? detail.title : ""} label="제목" rules={[{ required: true }]}>
+        <Form.Item name={"title"} label="제목" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item
-          name={"worker"}
-          initialValue={detail ? detail.worker : ""}
-          label="작업자"
-          rules={[{ required: true }]}
-        >
+        <Form.Item name={"worker"} label="작업자" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item
-          name={"content"}
-          initialValue={detail ? detail.content : ""}
-          label="내용"
-          rules={[{ required: true }]}
-        >
+        <Form.Item name={"content"} label="내용" rules={[{ required: true }]}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item name={"note"} initialValue={detail ? detail.note : ""} label="특이사항" rules={[{ required: true }]}>
+        <Form.Item name={"note"} label="특이사항" rules={[{ required: true }]}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item
-          name={"weather"}
-          initialValue={detail ? detail.weather : ""}
-          label="날씨"
-          rules={[{ required: true }]}
-        >
+        <Form.Item name={"weather"} label="날씨" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>

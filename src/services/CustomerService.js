@@ -31,7 +31,6 @@ CustomerService.getCustomer = function (pk) {
 };
 
 CustomerService.putCustomer = function (data) {
-  console.log(data);
   return fetch({
     url: `/api/v1/customers/update/${data.id}`,
     method: "put",

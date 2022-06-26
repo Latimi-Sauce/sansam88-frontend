@@ -156,7 +156,6 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal, pa
             icon={<FileExcelOutlined />}
             onClick={() => {
               if (selectedRows.length != 0) {
-                console.log(selectedRows);
                 history.push({ pathname: "/app/events/invoice", state: { selectedRows } });
               }
             }}
@@ -314,7 +313,7 @@ export const DetailModal = ({
       {orderImages ? (
         <Carousel autoplay>
           {orderImages.map((i) => (
-            <Image key={i.id} src={`${API_BASE_URL}/${i.image}`}></Image>
+            <Image key={i.id} src={`${i.image}`}></Image>
           ))}
         </Carousel>
       ) : (

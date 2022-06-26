@@ -18,7 +18,6 @@ CategoryService.postCategory = function (data) {
 };
 
 CategoryService.putCategory = function (data) {
-  console.log(data);
   return fetch({
     url: `api/v1/products/categories/update/${data.id}/`,
     method: "put",

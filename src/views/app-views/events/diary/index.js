@@ -65,6 +65,7 @@ export const diary = (props) => {
   const handleOk = (e) => {
     setModal(false);
     setDetailModal(false);
+    getLogList(location.state.id);
   };
 
   const handleCancel = (e) => {

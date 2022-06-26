@@ -304,9 +304,7 @@ export function* order() {
   });
   yield takeEvery(CREATE_ORDERITEM, function* (payload) {
     try {
-      yield put({ type: LOADING });
       yield call(OrderService.postOrderItem, payload.data);
-      yield put({ type: GET_ORDER_SUCCESS });
     } catch (err) {
       yield put({ type: GET_ORDER_FAIL, err });
     }

@@ -170,9 +170,6 @@ function selectProduct(props) {
             fileList={fileList}
             onPreview={handlePreview}
             onChange={handleChange}
-            onRemove={(e) => {
-              console.log(e);
-            }}
           >
             {fileList.length >= 4 ? null : uploadButton}
           </Upload>

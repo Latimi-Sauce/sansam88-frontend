@@ -92,9 +92,6 @@ export const AddFarm = (props) => {
             fileList={fileList}
             onPreview={handlePreview}
             onChange={handleChange}
-            onRemove={(e) => {
-              console.log(e);
-            }}
           >
             {fileList.length >= 1 ? null : uploadButton}
           </Upload>

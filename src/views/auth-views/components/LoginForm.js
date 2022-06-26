@@ -25,11 +25,6 @@ export const LoginForm = (props) => {
     allowRedirect,
   } = props;
 
-  const initialCredential = {
-    username: "admin",
-    password: "asdf",
-  };
-
   const onLogin = (values) => {
     showLoading();
     signIn(values);
@@ -65,7 +60,7 @@ export const LoginForm = (props) => {
       >
         <Alert type="error" showIcon message={message}></Alert>
       </motion.div>
-      <Form layout="vertical" name="login-form" initialValues={initialCredential} onFinish={onLogin}>
+      <Form layout="vertical" name="login-form" onFinish={onLogin}>
         <Form.Item
           name="username"
           label="아이디"
