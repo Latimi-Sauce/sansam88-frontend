@@ -1,7 +1,7 @@
 {
   "name": "latimi",
   "version": "2.1.6",
-  "private": false,
+  "private": true,
   "dependencies": {
     "@babel/eslint-parser": "^7.5.4",
     "antd": "4.17.3",
