@@ -1,10 +1,7 @@
 import { Button, Card, Col, Form, Image, Input, InputNumber, Modal, Row, Select, Table, Upload } from "antd";
 import React, { useEffect, useState } from "react";
-import { Tab } from "react-bootstrap";
 import { PlusOutlined } from "@ant-design/icons";
 import ProductModal from "../components/ProductModal";
-import Flex from "components/shared-components/Flex";
-import AvatarStatus from "components/shared-components/AvatarStatus";
 import { createOrder, createOrderItem, deleteOrder, getProduct, resetProject } from "redux/actions/Project";
 import { connect } from "react-redux";
 import { API_BASE_URL } from "configs/AppConfig";
