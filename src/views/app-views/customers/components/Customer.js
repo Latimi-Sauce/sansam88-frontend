@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Badge, Button, Card, Form, Input, InputNumber, Modal, Select, Table, Tag } from "antd";
+import React, { useEffect } from "react";
+import { Button, Card, Form, Input, InputNumber, Modal, Table } from "antd";
 import AvatarStatus from "components/shared-components/AvatarStatus";
 import Flex from "components/shared-components/Flex";
 import utils from "utils";

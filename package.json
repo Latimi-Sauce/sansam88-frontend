@@ -1,6 +1,7 @@
 {
   "name": "latimi",
   "version": "2.1.6",
+  "homepage": "http://sansam88.com",
   "private": true,
   "dependencies": {
     "@babel/eslint-parser": "^7.5.4",
@@ -63,7 +64,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "concurrently \"npm run start\" \"gulp watch\""
+    "dev": "concurrently \"npm run start\" \"gulp watch\"",
+    "deploy": "aws s3 sync ./build s3://sansam-front --profile frontend"
   },
   "eslintConfig": {
     "extends": [
