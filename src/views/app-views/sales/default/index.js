@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DetailModal, RecentOrder } from "../components/Sales";
 import {
-  deleteOrder,
+  deleteOrderIn,
   getOrderImages,
   getOrderItems,
   getOrderList,
@@ -19,7 +19,7 @@ export const SalesList = (props) => {
     resetProject,
     getOrderImages,
     getOrderItems,
-    deleteOrder,
+    deleteOrderIn,
     orderItems,
     updateOrder,
     orderImages,
@@ -52,7 +52,7 @@ export const SalesList = (props) => {
       cancelButtonText: "아니오",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteOrder(values);
+        deleteOrderIn(values);
         Swal.fire("삭제 완료", "정상적으로 삭제 되었습니다.", "success");
         setDetailModal(false);
       }
@@ -138,7 +138,7 @@ const mapDispatchToProps = {
   resetProject,
   getOrderImages,
   getOrderItems,
-  deleteOrder,
+  deleteOrderIn,
   updateOrder,
 };
 

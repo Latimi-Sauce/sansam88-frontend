@@ -30,7 +30,6 @@ function selectProduct(props) {
   const [previewImage, setPreviewImage] = useState();
   const [fileList, setFileList] = useState([]);
   const [products, setProducts] = useState([]);
-  const [totalPrice, setTotalPrice] = useState();
   // productModal
   const [showProductModal, setShowProductModal] = useState(false);
   const [cart, setCart] = useState([]);

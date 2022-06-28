@@ -20,6 +20,7 @@ import {
   DELETE_FARM,
   DELETE_LOG,
   DELETE_ORDER,
+  DELETE_ORDER_IN,
   DELETE_PRODUCT,
   DELETE_TRANSACTION,
   FARM_FAIL,
@@ -288,7 +289,7 @@ export function* order() {
     try {
       yield put({ type: LOADING });
       yield call(OrderService.putOrder, payload.data);
-      yield put({ type: GET_ORDER_LIST });
+      yield put({ type: RESET_PROJECT });
     } catch (err) {
       yield put({ type: GET_ORDER_FAIL, err });
     }
@@ -298,6 +299,15 @@ export function* order() {
       yield put({ type: LOADING });
       yield call(OrderService.deleteOrder, payload.pk);
       yield put({ type: RESET_PROJECT });
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+  yield takeEvery(DELETE_ORDER_IN, function* (payload) {
+    try {
+      yield put({ type: LOADING });
+      yield call(OrderService.deleteOrder, payload.pk);
+      yield put({ type: GET_ORDER_LIST });
     } catch (err) {
       yield put({ type: GET_ORDER_FAIL, err });
     }

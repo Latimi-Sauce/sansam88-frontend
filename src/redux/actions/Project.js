@@ -35,6 +35,7 @@ import {
   CREATE_LOG,
   UPDATE_LOG,
   DELETE_LOG,
+  DELETE_ORDER_IN,
 } from "../constants/Project";
 
 export const dashboard = () => {
@@ -125,6 +126,13 @@ export const updateOrder = (data) => {
 export const deleteOrder = (pk) => {
   return {
     type: DELETE_ORDER,
+    pk,
+  };
+};
+
+export const deleteOrderIn = (pk) => {
+  return {
+    type: DELETE_ORDER_IN,
     pk,
   };
 };

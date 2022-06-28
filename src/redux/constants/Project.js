@@ -19,6 +19,7 @@ export const GET_ORDER_LIST = "GET_ORDER_LIST";
 export const CREATE_ORDER = "CREATE_ORDER";
 export const UPDATE_ORDER = "UPDATE_ORDER";
 export const DELETE_ORDER = "DELETE_ORDER";
+export const DELETE_ORDER_IN = "DELETE_ORDER_IN";
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
 export const GET_ORDER_FAIL = "GET_ORDER_FAIL";
 export const GET_ORDER = "GET_ORDER";
