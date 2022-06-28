@@ -56,7 +56,9 @@ function CustomerModal(props) {
         title="Basic Modal"
         visible={visible}
         onOk={() => {
-          handleOk(customer);
+          if (customer) {
+            handleOk(customer);
+          }
         }}
         onCancel={handleCancel}
         width={"40%"}

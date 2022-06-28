@@ -43,7 +43,9 @@ export const DetailModal = ({
           type="danger"
           key={"delete"}
           onClick={() => {
-            onDelete(detail.id);
+            if (detail) {
+              onDelete(detail.id);
+            }
           }}
         >
           삭제

@@ -287,9 +287,8 @@ export function* order() {
   });
   yield takeEvery(UPDATE_ORDER, function* (payload) {
     try {
-      yield put({ type: LOADING });
       yield call(OrderService.putOrder, payload.data);
-      yield put({ type: RESET_PROJECT });
+      yield put({ type: GET_ORDER_LIST });
     } catch (err) {
       yield put({ type: GET_ORDER_FAIL, err });
     }

@@ -105,7 +105,11 @@ function ProductModal(props) {
         title="Basic Modal"
         visible={visible}
         onOk={() => {
-          handleOk(customer);
+          if (customer) {
+            if (customer) {
+              handleOk(customer);
+            }
+          }
         }}
         onCancel={handleCancel}
         width={700}
