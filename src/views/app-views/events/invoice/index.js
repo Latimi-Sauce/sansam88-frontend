@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { PrinterOutlined } from "@ant-design/icons";
 import { Card, Table, Button } from "antd";
-import { invoiceData } from "./invoiceData";
-import NumberFormat from "react-number-format";
 import { useLocation } from "react-router-dom";
 
 const { Column } = Table;
@@ -22,14 +20,14 @@ function Invoice() {
                   평창산양삼랜드
                 </span>
                 <br />
-                <span>경기도 평택시 고덕면 고덕북로</span>
+                <span>강원 평창군 용평면 태기로 1043-161</span>
                 <br />
-                <span>해피하우스 C동 201호</span>
+                <span>사업자: 심세훈</span>
                 <br />
                 <abbr className="text-dark" title="Phone">
                   전화번호:
                 </abbr>
-                <span>(123) 456-7890</span>
+                <span>(010) 3669-1147</span>
               </p>
             </address>
           </div>

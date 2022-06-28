@@ -297,7 +297,7 @@ export function* order() {
     try {
       yield put({ type: LOADING });
       yield call(OrderService.deleteOrder, payload.pk);
-      yield put({ type: GET_ORDER_LIST });
+      yield put({ type: RESET_PROJECT });
     } catch (err) {
       yield put({ type: GET_ORDER_FAIL, err });
     }

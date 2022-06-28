@@ -137,7 +137,6 @@ function selectProduct(props) {
     return () => {
       if (location.state.orderPk != null) {
         deleteOrder(location.state.orderPk["orderPk"]);
-        resetProject();
       } else {
         resetProject();
       }
