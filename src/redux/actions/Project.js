@@ -36,6 +36,9 @@ import {
   UPDATE_LOG,
   DELETE_LOG,
   DELETE_ORDER_IN,
+  CREATE_ORDER_PRICE,
+  DELETE_ORDER_ITEM,
+  GET_MEMO,
 } from "../constants/Project";
 
 export const dashboard = () => {
@@ -130,6 +133,12 @@ export const deleteOrder = (pk) => {
   };
 };
 
+export const deleteOrderItem = (pk) => {
+  return {
+    type: DELETE_ORDER_ITEM,
+    pk,
+  };
+};
 export const deleteOrderIn = (pk) => {
   return {
     type: DELETE_ORDER_IN,
@@ -141,6 +150,13 @@ export const createOrderImage = (data) => {
   return {
     type: CREATE_ORDERIMAGE,
     data,
+  };
+};
+export const createOrderPrice = (pk, price) => {
+  return {
+    type: CREATE_ORDER_PRICE,
+    pk,
+    price,
   };
 };
 
@@ -176,6 +192,13 @@ export const updateCustomer = (data) => {
 export const deleteCustomer = (pk) => {
   return {
     type: DELETE_CUSTOMER,
+    pk,
+  };
+};
+
+export const getMemo = (pk) => {
+  return {
+    type: GET_MEMO,
     pk,
   };
 };

@@ -45,4 +45,11 @@ CustomerService.deleteCustomer = function (pk) {
   });
 };
 
+CustomerService.getMemo = function (pk) {
+  return fetch({
+    url: `/api/v1/customers/memos/${pk}`,
+    method: "get",
+  });
+};
+
 export default CustomerService;

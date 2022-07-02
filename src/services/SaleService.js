@@ -3,7 +3,7 @@ import fetch from "auth/FetchInterceptor";
 const SaleService = {};
 
 SaleService.getOrderList = function (receiver) {
-  if (typeof receiver == "string") {
+  if (typeof receiver == "string" && receiver != "refund") {
     return fetch({
       url: `/api/v1/orders/?receiver=${receiver}`,
       method: "get",
@@ -13,7 +13,7 @@ SaleService.getOrderList = function (receiver) {
       url: `/api/v1/orders/?page=${receiver}`,
       method: "get",
     });
-  } else if (typeof receiver == "boolean") {
+  } else if (typeof receiver == "boolean" || receiver == "refund") {
     return fetch({
       url: `/api/v1/orders/?paid=${receiver}`,
       method: "get",

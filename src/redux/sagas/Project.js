@@ -13,6 +13,7 @@ import {
   CREATE_ORDER,
   CREATE_ORDERIMAGE,
   CREATE_ORDERITEM,
+  CREATE_ORDER_PRICE,
   CREATE_PRODUCT,
   DASHBOARD,
   DELETE_CATEGORY,
@@ -21,6 +22,7 @@ import {
   DELETE_LOG,
   DELETE_ORDER,
   DELETE_ORDER_IN,
+  DELETE_ORDER_ITEM,
   DELETE_PRODUCT,
   DELETE_TRANSACTION,
   FARM_FAIL,
@@ -36,6 +38,8 @@ import {
   GET_DASHBOARD_SUCCESS,
   GET_FARM_LIST,
   GET_LOG_LIST,
+  GET_MEMO,
+  GET_MEMOS_SUCCESS,
   GET_ORDERIMAGES,
   GET_ORDERIMAGE_SUCCESS,
   GET_ORDERITEMS,
@@ -186,6 +190,14 @@ export function* customer() {
       yield put({ type: GET_CUSTOMER_FAIL, err });
     }
   });
+  yield takeEvery(GET_MEMO, function* (payload) {
+    try {
+      const data = yield call(CustomerService.getMemo, payload.pk);
+      yield put({ type: GET_MEMOS_SUCCESS, data });
+    } catch (err) {
+      yield put({ type: GET_CUSTOMERLIST_FAIL, err });
+    }
+  });
 }
 
 //PRODUCT
@@ -201,9 +213,9 @@ export function* product() {
   });
   yield takeEvery(CREATE_PRODUCT, function* (payload) {
     try {
-      yield put({ type: LOADING });
       yield call(ProductService.postProduct, payload.data);
       yield put({ type: RESET_PROJECT });
+      yield put({ type: GET_CATEGORY_LIST });
       yield put({ type: PRODUCT_SUCCESS });
     } catch (err) {
       yield put({ type: PRODUCT_FAIL, err });
@@ -235,7 +247,6 @@ export function* product() {
 export function* category() {
   yield takeEvery(GET_CATEGORY_LIST, function* () {
     try {
-      yield put({ type: LOADING });
       const data = yield call(CategoryService.getCategoryList);
       yield put({ type: CATEGORY_SUCCESS, data });
     } catch (err) {
@@ -247,7 +258,7 @@ export function* category() {
       yield put({ type: LOADING });
       yield call(CategoryService.postCategory, payload.data);
       yield put({ type: RESET_PROJECT });
-      yield put({ type: PRODUCT_SUCCESS });
+      yield put({ type: GET_CATEGORY_LIST });
     } catch (err) {
       yield put({ type: PRODUCT_FAIL, err });
     }
@@ -257,7 +268,7 @@ export function* category() {
       yield put({ type: LOADING });
       yield call(CategoryService.putCategory, payload.data);
       yield put({ type: RESET_PROJECT });
-      yield put({ type: PRODUCT_SUCCESS });
+      yield put({ type: GET_CATEGORY_LIST });
     } catch (err) {
       yield put({ type: PRODUCT_FAIL, err });
     }
@@ -267,7 +278,7 @@ export function* category() {
       yield put({ type: LOADING });
       yield call(CategoryService.deleteCategory, payload.pk);
       yield put({ type: RESET_PROJECT });
-      yield put({ type: PRODUCT_SUCCESS });
+      yield put({ type: GET_CATEGORY_LIST });
     } catch (err) {
       yield put({ type: PRODUCT_FAIL, err });
     }
@@ -302,6 +313,13 @@ export function* order() {
       yield put({ type: GET_ORDER_FAIL, err });
     }
   });
+  yield takeEvery(DELETE_ORDER_ITEM, function* (payload) {
+    try {
+      yield call(OrderService.deleteOrderItem, payload.pk);
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
   yield takeEvery(DELETE_ORDER_IN, function* (payload) {
     try {
       yield put({ type: LOADING });
@@ -314,6 +332,13 @@ export function* order() {
   yield takeEvery(CREATE_ORDERITEM, function* (payload) {
     try {
       yield call(OrderService.postOrderItem, payload.data);
+    } catch (err) {
+      yield put({ type: GET_ORDER_FAIL, err });
+    }
+  });
+  yield takeEvery(CREATE_ORDER_PRICE, function* (payload) {
+    try {
+      yield call(OrderService.putPrice, payload.pk, payload.price);
     } catch (err) {
       yield put({ type: GET_ORDER_FAIL, err });
     }

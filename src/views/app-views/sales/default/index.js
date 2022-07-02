@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DetailModal, RecentOrder } from "../components/Sales";
+import { LoadingOutlined } from "@ant-design/icons";
+import moment from "moment";
 import {
   deleteOrderIn,
   getOrderImages,
@@ -10,6 +12,8 @@ import {
 } from "redux/actions/Project";
 import { connect } from "react-redux";
 import Swal from "sweetalert2";
+import Loading from "components/shared-components/Loading";
+import { Row } from "antd";
 
 export const SalesList = (props) => {
   const {
@@ -72,6 +76,10 @@ export const SalesList = (props) => {
         value: record.isPaid,
       },
       {
+        name: ["created"],
+        value: moment(record.created),
+      },
+      {
         name: ["isDelivered"],
         value: record.isDelivered,
       },
@@ -88,7 +96,9 @@ export const SalesList = (props) => {
     setDetailModal(true);
   };
   useEffect(() => {
-    getOrderList();
+    setTimeout(() => {
+      getOrderList();
+    }, 500);
     return () => {
       resetProject();
     };
@@ -104,7 +114,11 @@ export const SalesList = (props) => {
             showDetailModal={showDetailModal}
           />
         ) : (
-          ""
+          <Row align="center">
+            <Loading />
+            <span>-----</span>
+            <span>로딩중... (로딩이 계속 되면 새로고침을 눌러주세요)</span>
+          </Row>
         )}
       </div>
       {detailModal ? (

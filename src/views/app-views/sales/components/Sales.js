@@ -1,5 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Card, Carousel, Form, Image, Input, InputNumber, Modal, Row, Select, Table, Tag } from "antd";
+import {
+  Badge,
+  Button,
+  Card,
+  Carousel,
+  DatePicker,
+  Form,
+  Image,
+  Input,
+  InputNumber,
+  Modal,
+  Row,
+  Select,
+  Table,
+  Tag,
+} from "antd";
 import { SearchOutlined, FileExcelOutlined } from "@ant-design/icons";
 import AvatarStatus from "components/shared-components/AvatarStatus";
 import Flex from "components/shared-components/Flex";
@@ -77,7 +92,7 @@ export const orderTableColumns = [
     render: (_, record) => (
       <>
         <Badge status={getPaymentStatus(record.isPaid)} />
-        <span>{record.isPaid ? "결제 완료" : "결제 대기"}</span>
+        <span>{record.isPaid ? (record.isPaid == "refund" ? "환불" : "결제 완료") : "결제 대기"}</span>
       </>
     ),
     sorter: (a, b) => utils.antdTableSorter(a, b, "paymentStatus"),
@@ -103,6 +118,7 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal, pa
       value: true,
     },
     { name: "결제 대기", value: false },
+    { name: "환불", value: "refund" },
   ];
   const rowSelection = {
     onChange: (key, rows) => {
@@ -206,7 +222,7 @@ export const DetailModal = ({
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-
+  const history = useHistory();
   const validateMessages = {
     required: "입력이 필요합니다.",
     types: {
@@ -216,7 +232,7 @@ export const DetailModal = ({
   const columns = [
     {
       title: "상품",
-      dataIndex: "product",
+      dataIndex: "name",
     },
     {
       title: "갯수",
@@ -234,7 +250,9 @@ export const DetailModal = ({
     textAlign: "center",
     background: "#364d79",
   };
-
+  const goToEdit = () => {
+    history.push({ pathname: "/app/sales/edit", state: { orderPk: detail.id, edit: true, orderItems } });
+  };
   useEffect(() => {
     return () => {
       detail = "null";
@@ -282,6 +300,7 @@ export const DetailModal = ({
               결제 완료
             </Select.Option>
             <Select.Option value={false}>결제 대기 </Select.Option>
+            <Select.Option value={"refund"}>환불 </Select.Option>
           </Select>
         </Form.Item>
         <Form.Item
@@ -300,13 +319,19 @@ export const DetailModal = ({
         <Form.Item name={"sellerMemo"} label={"판매자 메모"} style={{ marginLeft: "-20%" }}>
           <TextArea />
         </Form.Item>
-        <Form.Item name={"customerMemo"} label={"판매자 메모"} style={{ marginLeft: "-20%" }}>
+        <Form.Item name={"customerMemo"} label={"고객 메모"} style={{ marginLeft: "-20%" }}>
           <TextArea />
+        </Form.Item>
+        <Form.Item name={"created"} label={"날짜"} style={{ marginLeft: "-20%" }}>
+          <DatePicker />
         </Form.Item>
         <Table columns={columns} rowKey={"id"} dataSource={orderItems} />
         <Row justify="center">
           <Button key={"update"} type="primary" style={{ marginBottom: "16px" }} htmlType="submit">
-            수정
+            간편 수정
+          </Button>
+          <Button key={"updateProduct"} onClick={goToEdit} style={{ marginBottom: "16px", marginLeft: "10px" }}>
+            가격 수정
           </Button>
         </Row>
       </Form>

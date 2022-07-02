@@ -81,15 +81,15 @@ service.interceptors.response.use(
     }
 
     if (error.response.status === 404) {
-      notificationParam.message = "Not Found";
+      notificationParam.message = "잘못된 접근입니다";
     }
 
     if (error.response.status === 500) {
-      notificationParam.message = "Internal Server Error";
+      notificationParam.message = "서버 문제로 인해 저장이 기록되지 않았습니다";
     }
 
     if (error.response.status === 508) {
-      notificationParam.message = "Time Out";
+      notificationParam.message = "시간 지연으로 인한 문제입니다.";
     }
     notification.error(notificationParam);
 

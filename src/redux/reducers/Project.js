@@ -12,6 +12,7 @@ import {
   GET_CUSTOMER_SUCCESS,
   GET_DASHBOARD_FAIL,
   GET_DASHBOARD_SUCCESS,
+  GET_MEMOS_SUCCESS,
   GET_ORDERIMAGE_SUCCESS,
   GET_ORDERITEMS_SUCCESS,
   GET_ORDER_FAIL,
@@ -100,6 +101,12 @@ const project = (state = initState, action) => {
         ...state,
         loading: false,
         customer: action.data,
+      };
+    case GET_MEMOS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        memos: action.data,
       };
     case GET_CUSTOMER_FAIL:
       return {

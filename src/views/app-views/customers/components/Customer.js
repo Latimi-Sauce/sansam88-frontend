@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
-import { Button, Card, Form, Input, InputNumber, Modal, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Card, Divider, Form, Input, InputNumber, Modal, Select, Space, Table, Typography } from "antd";
 import AvatarStatus from "components/shared-components/AvatarStatus";
 import Flex from "components/shared-components/Flex";
 import utils from "utils";
+import { Option } from "antd/lib/mentions";
 
 export const customerTableColumn = [
   {
@@ -86,6 +88,19 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, onUpdate,
       number: "숫자를 입력해 주세요",
     },
   };
+  const [items, setItems] = useState(["네이버", "평창산양삼랜드"]);
+  const [name, setName] = useState("");
+  let index = 0;
+  const onNameChange = (event) => {
+    setName(event.target.value);
+  };
+  const { Option } = Select;
+
+  const addItem = (e) => {
+    e.preventDefault();
+    setItems([...items, name || `New item ${index++}`]);
+    setName("");
+  };
   useEffect(() => {
     return () => {
       detail = "null";
@@ -146,7 +161,42 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, onUpdate,
           <Input type={"email"} />
         </Form.Item>
         <Form.Item name={"reference"} initialValue={detail ? detail.reference : ""} label="소개자">
-          <Input.TextArea />
+          <Select
+            style={{
+              width: 300,
+            }}
+            placeholder="소개자 선택"
+            dropdownRender={(menu) => (
+              <>
+                {menu}
+                <Divider
+                  style={{
+                    margin: "8px 0",
+                  }}
+                />
+                <Space
+                  align="center"
+                  style={{
+                    padding: "0 8px 4px",
+                  }}
+                >
+                  <Input placeholder="경로 입력" value={name} onChange={onNameChange} />
+                  <Typography.Link
+                    onClick={addItem}
+                    style={{
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <PlusOutlined /> 추가
+                  </Typography.Link>
+                </Space>
+              </>
+            )}
+          >
+            {items.map((item) => (
+              <Option key={item}>{item}</Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Button type="primary" htmlType="submit">

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, message, Card, Input, Row, Select } from "antd";
+import { Form, Button, message, Card, Input, Row, Select, DatePicker, Table } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import CustomerModal from "../components/CustomerModal";
 import { connect, createDispatchHook } from "react-redux";
-import { createOrder, getCustomerList, resetProject } from "redux/actions/Project";
+import { createOrder, getCustomerList, getMemo, resetProject } from "redux/actions/Project";
 import { useHistory } from "react-router-dom";
-
+import moment from "moment";
 const ProductCreate = (props) => {
-  const { loading, customerList, getCustomerList, resetProject, createOrder, orderPk } = props;
+  const { loading, customerList, getCustomerList, resetProject, createOrder, orderPk, getMemo, memos } = props;
   const [visible, setVisible] = useState();
   const [fields, setFields] = useState();
+  const [customer, setCustomer] = useState();
   const history = useHistory();
   const onFinish = (data) => {
     createOrder(data);
@@ -45,12 +46,36 @@ const ProductCreate = (props) => {
         },
       ]);
     }
+    setCustomer(customer);
     setVisible(false);
   };
 
   const handleCancel = (e) => {
     setVisible(false);
   };
+
+  const handleCustomer = () => {
+    if (customer) {
+      getMemo(customer.id);
+    }
+  };
+
+  const column = [
+    {
+      title: "날짜",
+      dataIndex: "created",
+      render: (_, record) => <span>{moment(record.created).format("YYYY-MM-DD")}</span>,
+    },
+    {
+      title: "판매자 메모",
+      dataIndex: "sellerMemo",
+    },
+    {
+      title: "고객 메모",
+      dataIndex: "customerMemo",
+    },
+  ];
+
   useEffect(() => {
     getCustomerList();
     return () => {
@@ -65,19 +90,24 @@ const ProductCreate = (props) => {
           <Form.Item name={"customer"} hidden>
             <Input></Input>
           </Form.Item>
-          <Row justify={"end"}>
-            <Button type={"primary"} onClick={showModal}>
-              고객 찾기
-            </Button>
-          </Row>
-          <Form.Item
-            name={"customerName"}
-            label={"고객이름"}
-            message={"hi"}
-            rules={[{ required: true, message: "고객을 입력해주세요" }]}
-          >
-            <Input disabled></Input>
+          <Form.Item name={"created"} label={"날짜"} rules={[{ required: true, message: "날짜를 입력해주세요" }]}>
+            <DatePicker />
           </Form.Item>
+          <Row justify="space-between">
+            <Form.Item
+              name={"customerName"}
+              label={"고객이름"}
+              message={"hi"}
+              rules={[{ required: true, message: "고객을 입력해주세요" }]}
+            >
+              <Input disabled></Input>
+            </Form.Item>
+            <Row>
+              <Button type={"primary"} onClick={showModal}>
+                고객 찾기
+              </Button>
+            </Row>
+          </Row>
           <Form.Item
             name={"receiver"}
             label={"받는사람"}
@@ -122,19 +152,26 @@ const ProductCreate = (props) => {
         handleCancel={handleCancel}
         getCustomerList={getCustomerList}
       />
+      <Card title={`${customer ? `${customer.name}님의 메모` : "고객 메모 (고객을 선택해주세요)"}`}>
+        <Row justify="end">
+          <Button onClick={handleCustomer}>메모 보기</Button>
+        </Row>
+        <Table columns={column} dataSource={memos ? memos : ""} rowKey={"id"} />
+      </Card>
     </>
   );
 };
 
 const mapStateToProps = ({ project }) => {
-  const { loading, customerList, orderPk } = project;
-  return { loading, customerList, orderPk };
+  const { loading, customerList, orderPk, memos } = project;
+  return { loading, customerList, orderPk, memos };
 };
 
 const mapDispatchToProps = {
   getCustomerList,
   resetProject,
   createOrder,
+  getMemo,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductCreate);

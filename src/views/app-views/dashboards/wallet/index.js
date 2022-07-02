@@ -104,7 +104,7 @@ export const Wallet = (props) => {
                   title={wallet.deposit.title}
                   value={String(wallet.deposit.amount)}
                   status={wallet.deposit.status}
-                  subtitle={"한달 비교"}
+                  subtitle={"한달 비교 (일주일)"}
                 />
               </Col>
               <Col xs={24} sm={24} md={24} lg={24} xl={8}>
@@ -112,7 +112,7 @@ export const Wallet = (props) => {
                   title={wallet.expense.title}
                   value={String(wallet.expense.amount)}
                   status={wallet.expense.status}
-                  subtitle={"한달 비교"}
+                  subtitle={"한달 비교 (일주일)"}
                 />
               </Col>
             </Row>

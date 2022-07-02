@@ -2,7 +2,14 @@ import { Button, Card, Form, Input, InputNumber, Modal, Row, Table, Upload } fro
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import ProductModal from "../components/ProductModal";
-import { createOrderItem, createOrderPrice, deleteOrder, getProduct, resetProject } from "redux/actions/Project";
+import {
+  createOrderItem,
+  createOrderPrice,
+  deleteOrder,
+  deleteOrderItem,
+  getProduct,
+  resetProject,
+} from "redux/actions/Project";
 import { connect } from "react-redux";
 import { API_BASE_URL } from "configs/AppConfig";
 import { useHistory } from "react-router-dom";
@@ -23,8 +30,8 @@ const uploadButton = (
   </div>
 );
 
-function selectProduct(props) {
-  const { location, loading, getProduct, product, resetProject, createOrderItem, deleteOrder, createOrderPrice } =
+function editOrder(props) {
+  const { location, loading, getProduct, product, resetProject, createOrderItem, createOrderPrice, deleteOrderItem } =
     props;
   const [previewVisible, setPreviewVisible] = useState(false);
   const [validator, setValidator] = useState(false);
@@ -35,7 +42,9 @@ function selectProduct(props) {
   // productModal
   const [showProductModal, setShowProductModal] = useState(false);
   const [cart, setCart] = useState([]);
+  const [deleteOrderItems, setDeleteOrderItems] = useState();
   const history = useHistory();
+
   const handleCancel = () => {
     setPreviewVisible(false);
   };
@@ -46,7 +55,6 @@ function selectProduct(props) {
     setPreviewImage(file.url || file.preview);
     setPreviewVisible(true);
   };
-
   const handleproducts = (id, value, price) => {
     if (products.length != 0) {
       for (const i in products) {
@@ -65,17 +73,36 @@ function selectProduct(props) {
     setCart(cart.filter((item) => item.id != id));
   };
   const goToOrder = (value) => {
-    createOrderPrice(location.state.orderPk["orderPk"], value);
-    if (products.length > 0) {
-      for (const i in products) {
-        createOrderItem(products[i]);
+    createOrderPrice(location.state.orderPk, value);
+    const promise = new Promise((resolve, reject) => {
+      if (deleteOrderItems.length > 0) {
+        for (const i in deleteOrderItems) {
+          deleteOrderItem(deleteOrderItems[i]);
+        }
       }
-      setValidator(true);
-    }
-    if (products != []) {
-      location.state.orderPk = null;
-      history.push("/app/sales");
-    }
+      setTimeout(() => {
+        resolve("finished");
+        reject(new Error("broke"));
+      }, 500);
+    });
+    promise
+      .then(() => {
+        if (products.length > 0) {
+          for (const i in products) {
+            createOrderItem(products[i]);
+          }
+          setValidator(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        if (products != []) {
+          location.state.orderPk = null;
+          history.push("/app/sales");
+        }
+      });
   };
 
   const handleChange = ({ fileList }) => {
@@ -83,6 +110,11 @@ function selectProduct(props) {
   };
 
   const columns = [
+    {
+      title: "id",
+      dataIndex: "id",
+      render: (_, record) => <span>{record.id}</span>,
+    },
     {
       title: "상품",
       dataIndex: "name",
@@ -134,10 +166,7 @@ function selectProduct(props) {
   const handleOk = (data) => {
     if (!cart.includes(data)) {
       setCart([...cart, data]);
-      setProducts([
-        ...products,
-        { id: data.id, value: 1, price: data.price, order: location.state.orderPk["orderPk"] },
-      ]);
+      setProducts([...products, { id: data.id, value: 1, price: data.price, order: location.state.orderPk }]);
     }
     setShowProductModal(false);
   };
@@ -152,12 +181,11 @@ function selectProduct(props) {
     ]);
   };
 
+  // product id를 통해서 상품관련사항을 가져온다.
   useEffect(() => {
     getProduct();
     return () => {
-      if (location.state.orderPk != null) {
-        deleteOrder(location.state.orderPk["orderPk"]);
-      }
+      resetProject();
     };
   }, []);
   useEffect(() => {
@@ -165,11 +193,25 @@ function selectProduct(props) {
       history.goBack();
     }
   }, [location.state.orderPk]);
-
+  useEffect(() => {
+    if (product) {
+      const foreignCarts = [];
+      const foreignProducts = [];
+      const deleteOrderItems = [];
+      location.state.orderItems.forEach((element) => {
+        foreignCarts.push(product.result.find((ele) => ele.id === element.product));
+        foreignProducts.push({ id: element.product, value: element.qty, price: element.price, order: element.order });
+        deleteOrderItems.push(element.id);
+      });
+      setTimeout(() => {
+        setCart(foreignCarts);
+        setProducts(foreignProducts);
+        setDeleteOrderItems(deleteOrderItems);
+      }, 600);
+    }
+  }, [product]);
   return (
     <Form onFinish={goToOrder} fields={fields}>
-      {console.log("product", products)}
-      {console.log("cart", cart)}
       <Card title={"주문 상품"}>
         <Button onClick={handleShowModal}>상품 추가</Button>
         <Table dataSource={cart} rowKey={"id"} columns={columns}></Table>
@@ -237,6 +279,7 @@ const mapDispatchToProps = {
   createOrderItem,
   deleteOrder,
   createOrderPrice,
+  deleteOrderItem,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(selectProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(editOrder);

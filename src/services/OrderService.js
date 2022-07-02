@@ -34,6 +34,14 @@ OrderService.putOrder = function (data) {
   });
 };
 
+OrderService.putPrice = function (pk, price) {
+  return fetch({
+    url: `/api/v1/orders/price/${pk}`,
+    method: "put",
+    data: price,
+  });
+};
+
 OrderService.deleteOrder = function (pk) {
   return fetch({
     url: `/api/v1/orders/delete/${pk}`,
@@ -51,6 +59,13 @@ OrderService.getOrderImages = function (pk) {
   return fetch({
     url: `/api/v1/orders/orderImages/${pk}`,
     method: "get",
+  });
+};
+
+OrderService.deleteOrderItem = function (pk) {
+  return fetch({
+    url: `/api/v1/orders/orderItem/delete/${pk}`,
+    method: "delete",
   });
 };
 
