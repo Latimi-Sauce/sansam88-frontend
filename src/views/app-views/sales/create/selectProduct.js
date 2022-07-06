@@ -65,16 +65,34 @@ function selectProduct(props) {
     setCart(cart.filter((item) => item.id != id));
   };
   const goToOrder = (value) => {
-    createOrderPrice(location.state.orderPk["orderPk"], value);
-    if (products.length > 0) {
-      for (const i in products) {
-        createOrderItem(products[i]);
-      }
-      setValidator(true);
-    }
-    if (products != []) {
-      location.state.orderPk = null;
-      history.push("/app/sales");
+    if (products.length !== 0) {
+      const promise = new Promise((resolve, reject) => {
+        createOrderPrice(location.state.orderPk["orderPk"], value);
+        setTimeout(() => {
+          resolve("finished");
+          reject(new Error("broke"));
+        }, 500);
+      });
+      promise
+        .then(() => {
+          if (products.length > 0) {
+            for (const i in products) {
+              createOrderItem(products[i]);
+            }
+            setValidator(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          if (products.length !== 0) {
+            location.state.orderPk = null;
+            history.push("/app/sales");
+          }
+        });
+    } else {
+      window.alert("상품이 없습니다.");
     }
   };
 
@@ -168,8 +186,6 @@ function selectProduct(props) {
 
   return (
     <Form onFinish={goToOrder} fields={fields}>
-      {console.log("product", products)}
-      {console.log("cart", cart)}
       <Card title={"주문 상품"}>
         <Button onClick={handleShowModal}>상품 추가</Button>
         <Table dataSource={cart} rowKey={"id"} columns={columns}></Table>

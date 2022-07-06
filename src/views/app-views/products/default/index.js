@@ -145,6 +145,16 @@ const Product = (props) => {
       render: (qty) => <Flex alignItems="center">{getStockStatus(qty)}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, "qty"),
     },
+    {
+      title: "판매액",
+      dataIndex: "soldPrice",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "qty"),
+    },
+    {
+      title: "판매량",
+      dataIndex: "soldNumber",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "qty"),
+    },
   ];
 
   const onSearch = (e) => {

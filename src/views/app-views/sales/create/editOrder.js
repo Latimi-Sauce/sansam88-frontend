@@ -73,36 +73,40 @@ function editOrder(props) {
     setCart(cart.filter((item) => item.id != id));
   };
   const goToOrder = (value) => {
-    createOrderPrice(location.state.orderPk, value);
-    const promise = new Promise((resolve, reject) => {
-      if (deleteOrderItems.length > 0) {
-        for (const i in deleteOrderItems) {
-          deleteOrderItem(deleteOrderItems[i]);
-        }
-      }
-      setTimeout(() => {
-        resolve("finished");
-        reject(new Error("broke"));
-      }, 500);
-    });
-    promise
-      .then(() => {
-        if (products.length > 0) {
-          for (const i in products) {
-            createOrderItem(products[i]);
+    if (products.length !== 0) {
+      const promise = new Promise((resolve, reject) => {
+        createOrderPrice(location.state.orderPk, value);
+        if (deleteOrderItems.length > 0) {
+          for (const i in deleteOrderItems) {
+            deleteOrderItem(deleteOrderItems[i]);
           }
-          setValidator(true);
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        if (products != []) {
-          location.state.orderPk = null;
-          history.push("/app/sales");
-        }
+        setTimeout(() => {
+          resolve("finished");
+          reject(new Error("broke"));
+        }, 500);
       });
+      promise
+        .then(() => {
+          if (products.length > 0) {
+            for (const i in products) {
+              createOrderItem(products[i]);
+            }
+            setValidator(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          if (products.length !== 0) {
+            location.state.orderPk = null;
+            history.push("/app/sales");
+          }
+        });
+    } else {
+      window.alert("상품이 없습니다.");
+    }
   };
 
   const handleChange = ({ fileList }) => {

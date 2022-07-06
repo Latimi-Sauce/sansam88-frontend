@@ -112,6 +112,8 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal, pa
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const history = useHistory();
+  const { RangePicker } = DatePicker;
+  const dateFormat = "YYYY-MM-DD";
   const paymentStatusList = [
     {
       name: "결제 완료",
@@ -127,7 +129,8 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal, pa
     },
   };
   const onSearch = (e) => {
-    const value = e.currentTarget.value;
+    let value = e.currentTarget.value;
+    value = { value: value };
     if (value === "") {
       getOrderList();
     } else {
@@ -139,6 +142,13 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal, pa
     getOrderList(page.current);
   };
 
+  const handleDate = (date) => {
+    if (date) {
+      const list = { start: date[0].format("YYYY-MM-DD"), end: date[1].format("YYYY-MM-DD") };
+      getOrderList(list);
+    }
+  };
+
   const handleShowStatus = (value) => {
     getOrderList(value);
   };
@@ -147,7 +157,7 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal, pa
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         <Flex className="mb-1" mobileFlex={false}>
           <div className="mr-md-3 mb-3">
-            <Input placeholder="Search" prefix={<SearchOutlined />} onPressEnter={(e) => onSearch(e)} />
+            <Input placeholder="고객/주문번호" prefix={<SearchOutlined />} onPressEnter={(e) => onSearch(e)} />
           </div>
           <div className="mb-3">
             <Select
@@ -164,6 +174,9 @@ export const RecentOrder = ({ recentOrderData, getOrderList, showDetailModal, pa
                 </Select.Option>
               ))}
             </Select>
+          </div>
+          <div style={{ marginLeft: "10px" }}>
+            <RangePicker format={dateFormat} onChange={handleDate} />
           </div>
         </Flex>
         <div>

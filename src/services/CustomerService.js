@@ -3,9 +3,28 @@ import fetch from "auth/FetchInterceptor";
 const CustomerService = {};
 
 CustomerService.getCustomerList = function (data) {
-  if (data) {
+  let value;
+  let temp = parseInt(data);
+  if (!isNaN(temp)) {
+    value = temp;
+  } else {
+    value = data;
+  }
+  if (typeof value === "string") {
     return fetch({
-      url: `/api/v1/customers/?keyword=${data}`,
+      url: `/api/v1/customers/?keyword=${value}`,
+      method: "get",
+    });
+  } else if (typeof value === "number") {
+    value = String(value);
+    let phoneNumber;
+    if (value.length > 7) {
+      phoneNumber = "0" + value.slice(0, 2) + "-" + value.slice(2, 6) + "-" + value.slice(6);
+    } else {
+      phoneNumber = "0" + value.slice(0, 2) + "-" + value.slice(2, 6);
+    }
+    return fetch({
+      url: `/api/v1/customers/?phoneNumber=${phoneNumber}`,
       method: "get",
     });
   }
