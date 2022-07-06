@@ -125,7 +125,11 @@ export const Farms = (props) => {
                         cover={
                           <img
                             alt="example"
-                            src={i.image ? `${i.image}` : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"}
+                            src={
+                              i.image
+                                ? `${i.image}`
+                                : "https://i.picsum.photos/id/1043/200/200.jpg?hmac=i7xbST4bM6KMg5XsUaVYvDgwvsZ3VskoXKRqGf1BjcU"
+                            }
                           />
                         }
                         onClick={() => {
@@ -174,7 +178,11 @@ export const Farms = (props) => {
                     cover={
                       <img
                         alt="example"
-                        src={i.image ? `${i.image}` : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"}
+                        src={
+                          i.image
+                            ? `${i.image}`
+                            : "https://i.picsum.photos/id/1043/200/200.jpg?hmac=i7xbST4bM6KMg5XsUaVYvDgwvsZ3VskoXKRqGf1BjcU"
+                        }
                       />
                     }
                     onClick={() => goToDiary(i.id, i.title)}
