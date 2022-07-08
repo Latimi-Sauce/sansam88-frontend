@@ -1,13 +1,13 @@
 const dev = {
-  API_ENDPOINT_URL: "http://localhost:8000",
+  API_ENDPOINT_URL: "https://sansam.link",
 };
 
 const prod = {
-  API_ENDPOINT_URL: "http://localhost:8000",
+  API_ENDPOINT_URL: "https://sansam.link",
 };
 
 const test = {
-  API_ENDPOINT_URL: "http://localhost:8000",
+  API_ENDPOINT_URL: "https://sansam.link",
 };
 
 const getEnv = () => {
