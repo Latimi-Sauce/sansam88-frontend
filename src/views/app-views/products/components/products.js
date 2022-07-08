@@ -84,10 +84,10 @@ export const DetailModal = ({
           </Select>
         </Form.Item>
         <Form.Item name={"qty"} initialValue={detail ? detail.qty : ""} label="수량">
-          <InputNumber min={0} />
+          <InputNumber min={0} style={{ width: 200 }} />
         </Form.Item>
         <Form.Item name={"price"} initialValue={detail ? detail.price : ""} label="가격">
-          <InputNumber min={0} />
+          <InputNumber min={0} style={{ width: 200 }} />
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Button type="primary" htmlType="submit">

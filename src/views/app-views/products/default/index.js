@@ -148,12 +148,12 @@ const Product = (props) => {
     {
       title: "판매액",
       dataIndex: "soldPrice",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "qty"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, "soldPrice"),
     },
     {
       title: "판매량",
       dataIndex: "soldNumber",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "qty"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, "soldNumber"),
     },
   ];
 

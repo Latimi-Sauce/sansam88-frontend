@@ -10,6 +10,7 @@ export const customerTableColumn = [
   {
     title: "ID",
     dataIndex: "id",
+    sorter: (a, b) => utils.antdTableSorter(a, b, "id"),
   },
   {
     title: "고객",
@@ -88,7 +89,7 @@ export const DetailModal = ({ handleOk, handleCancel, modal, onDelete, onUpdate,
       number: "숫자를 입력해 주세요",
     },
   };
-  const [items, setItems] = useState(["네이버", "평창산양삼랜드"]);
+  const [items, setItems] = useState(["네이버", "평창산양삼랜드", "기타", " "]);
   const [name, setName] = useState("");
   let index = 0;
   const onNameChange = (event) => {
